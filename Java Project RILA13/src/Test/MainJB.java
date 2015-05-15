@@ -9,9 +9,9 @@ public class MainJB {
 
 		ConnectDB db = new ConnectDB();
 		
-		String sql = "SELECT * FROM JMJB_Cinema";
+		String sql = "SELECT * FROM Cinema";
 		
-		db.ReadDB(sql);
+		db.ExecuteDB(sql);
 		
 		db.CloseDB();
 	}

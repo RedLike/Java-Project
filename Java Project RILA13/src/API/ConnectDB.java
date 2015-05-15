@@ -19,8 +19,8 @@ public class ConnectDB {
 	
 	public ConnectDB() {
 		super();
-		this.databaseName = "cesi_rila13";
-		this.url = "jdbc:mysql://vps104447.ovh.net/" + this.databaseName;
+		this.databaseName = "cesi_java";
+		this.url = "jdbc:mysql://localhost/" + this.databaseName;
 		this.login = "rila13";
 		this.passwd = "LLF4t27b";
 		this.cn = null;
@@ -34,7 +34,7 @@ public class ConnectDB {
 			//Création d'un statement
 			this.st = this.cn.createStatement();
 			// Check
-			System.out.println("Connexion OK?");
+//			System.out.println("Connexion OK?");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -45,18 +45,26 @@ public class ConnectDB {
 	}
 	
 	
-	public void ReadDB(String sql) {
+	@SuppressWarnings("finally")
+	public ResultSet ExecuteDB(String sql) {
+		ResultSet rs = null;
 		try {
 			//exécution de la requète
-			ResultSet rs = this.st.executeQuery(sql);
+			rs = this.st.executeQuery(sql);
 			//parcours résultat
 			while (rs.next()) {
-				System.out.println(rs.getString(0));
+				System.out.println(rs.getString(2));
 			}
+			// Retourne résultat
+//			return rs;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			// Retourne résultat
+			return rs;
 		}
+		
 	}
 	
 	
