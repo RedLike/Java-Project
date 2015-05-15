@@ -33,8 +33,6 @@ public class ConnectDB {
 			this.cn = DriverManager.getConnection(this.url, this.login, this.passwd);
 			//Création d'un statement
 			this.st = this.cn.createStatement();
-			// Check
-//			System.out.println("Connexion OK?");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -46,15 +44,15 @@ public class ConnectDB {
 	
 	
 	@SuppressWarnings("finally")
-	public ResultSet ExecuteDB(String sql) {
+	public ResultSet ReadDB(String sql) {
 		ResultSet rs = null;
 		try {
 			//exécution de la requète
 			rs = this.st.executeQuery(sql);
 			//parcours résultat
-			while (rs.next()) {
-				System.out.println(rs.getString(2));
-			}
+//			while (rs.next()) {
+//				System.out.println(rs.getString(1));
+//			}
 			// Retourne résultat
 //			return rs;
 			
@@ -64,6 +62,26 @@ public class ConnectDB {
 			// Retourne résultat
 			return rs;
 		}
+		
+	}
+	
+
+	public Integer WriteDB(String sql) {
+		Integer rs = null;
+		try {
+			//exécution de la requète
+			rs = this.st.executeUpdate(sql);
+			//parcours résultat
+//			while (rs.next()) {
+//				System.out.println(rs.getString(1));
+//			}
+			// Retourne résultat
+//			return rs;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rs;
 		
 	}
 	
