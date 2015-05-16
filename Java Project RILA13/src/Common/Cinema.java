@@ -8,12 +8,13 @@ import Interface.ADM;
 
 public class Cinema implements ADM {
 
-	public Integer id;
-	public String city;
-	public String name;
-	public String address;
+	private Integer id;
+	private String city;
+	private String name;
+	private String address;
 	
 	
+	//CONSTRUCTOR
 	private Cinema() {
 		super();
 	}
@@ -32,13 +33,14 @@ public class Cinema implements ADM {
 	}
 
 
+	
+	//GETTERS & SETTERS
 	public String getCity() {
 		return city;
 	}
 	
-	public boolean setCity(String city) {
+	public void setCity(String city) {
 		this.city = city;
-		return modify();
 	}
 
 
@@ -46,9 +48,8 @@ public class Cinema implements ADM {
 		return name;
 	}
 
-	public boolean setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return modify();
 	}
 
 
@@ -56,9 +57,8 @@ public class Cinema implements ADM {
 		return address;
 	}
 
-	public boolean setAddress(String address) {
+	public void setAddress(String address) {
 		this.address = address;
-		return modify();
 	}
 
 
@@ -70,6 +70,8 @@ public class Cinema implements ADM {
 		this.id = Id;
 	}
 
+	
+	//CRUD
 	@Override
 	public boolean create() {
 		// TODO Auto-generated method stub
@@ -97,7 +99,7 @@ public class Cinema implements ADM {
 			} else {
 //				result0.next();
 				setId(result0.getInt(1));
-				System.out.println("Cinéma déjà existant");
+				System.out.println("Cinéma already exist");
 				res = false;
 			}
 			
@@ -113,7 +115,7 @@ public class Cinema implements ADM {
 
 
 	@Override
-	public boolean modify() {
+	public boolean update() {
 		// TODO Auto-generated method stub
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
@@ -135,6 +137,7 @@ public class Cinema implements ADM {
 		
 		return res;
 	}
+	
 
 	@Override
 	public boolean delete() {
@@ -144,9 +147,13 @@ public class Cinema implements ADM {
 		
 		try {
 			String sqlDelete0 = "DELETE FROM Cinema WHERE Id='"+this.id+"'";
-			db.WriteDB(sqlDelete0);
+//			db.WriteDB(sqlDelete0);
+			if (db.WriteDB(sqlDelete0) != null) {
+				res = true;
+			} else {
+				res = false;
+			}
 			
-			res = true;
 		} finally {
 			db.CloseDB();
 		}

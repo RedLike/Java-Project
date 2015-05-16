@@ -4,7 +4,7 @@ public interface ADM {
 
 	public boolean create();
 	
-	public boolean modify();
+	public boolean update();
 	
 	public boolean delete();
 	
