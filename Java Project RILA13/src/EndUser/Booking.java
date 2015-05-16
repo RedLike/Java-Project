@@ -17,7 +17,7 @@ public class Booking implements ADM{
 	private Terminal terminal;
 	
 	
-	//CONSTRUCTORS
+	//CONSTRUCTOR
 	private Booking() {
 		super();
 	}

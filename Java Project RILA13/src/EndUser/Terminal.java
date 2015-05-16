@@ -14,7 +14,7 @@ public class Terminal implements ADM {
 	private Cinema cinema;
 	
 	
-	//CONSTRUCTORS
+	//CONSTRUCTOR
 	private Terminal() {
 		super();
 	}

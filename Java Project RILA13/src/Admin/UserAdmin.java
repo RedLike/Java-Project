@@ -14,7 +14,7 @@ public class UserAdmin implements ADM {
 	private String password;
 	
 	
-	//CONSTRUCTORS
+	//CONSTRUCTOR
 	private UserAdmin() {
 		super();
 	}
