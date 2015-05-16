@@ -14,7 +14,7 @@ public class Cinema implements ADM {
 	private String address;
 	
 	
-	//CONSTRUCTOR
+	//CONSTRUCTORS
 	private Cinema() {
 		super();
 	}

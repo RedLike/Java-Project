@@ -19,7 +19,7 @@ public class FilmShow implements ADM {
 	private Cinema cinema;
 	
 	
-	//CONSTRUCTOR
+	//CONSTRUCTORS
 	private FilmShow() {
 		super();
 	}
