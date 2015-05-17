@@ -1,6 +1,8 @@
 package Common;
 
 public class Room {
+	
+	private int id;
 	private int number;
 	private int chair;
 	
@@ -30,6 +32,15 @@ public class Room {
 
 	
 	//GETTERS & SETTERS
+	
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getNumber() {
 		return this.number;
 	}

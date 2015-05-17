@@ -2,6 +2,7 @@ package Common;
 
 public class Format {
 	
+	private int id;
 	private String label;
 	private String language;
 	private String description;
@@ -31,6 +32,15 @@ public class Format {
 	}
 
 	//GETTERS & SETTERS
+	
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getLabel() {
 		return label;
 	}
