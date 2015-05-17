@@ -1,5 +1,10 @@
 package Common;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import API.ConnectDB;
+
 public class Format {
 	
 	private int id;
@@ -15,20 +20,113 @@ public class Format {
 	}
 	
 	//CRUD
-	public void createFormat(String label, String language, String description) {
+	public boolean create(String label, String language, String description) {
 		
+		boolean res = false;
+		ConnectDB db = new ConnectDB();
+		
+		try {
+			String sqlRead0 = "SELECT Id, Label, Language, Description FROM Format "
+							+ "WHERE Label='"+label+"' AND Language='"+language+"' AND Description='"+description+"'";
+			ResultSet result0 = db.ReadDB(sqlRead0);
+			
+			if (!result0.next()) {
+				String sqlInsert0 = "INSERT INTO Format(Label, Language, Description) VALUES('"+label+"', '"+language+"', '"+description+"')";
+				System.out.println(sqlInsert0);
+				db.WriteDB(sqlInsert0);
+				
+				String sqlRead1 = "SELECT LAST_INSERT_ID()";
+				ResultSet result1 = db.ReadDB(sqlRead1);
+				
+				result1.next();
+				setId(result1.getInt(1));
+				res = true;
+				
+			} else {
+//				result0.next();
+				setId(result0.getInt(1));
+				System.out.println("Format already exist");
+				res = false;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.CloseDB();
+		}
+		
+		return res;
 	}
 	
-	public void readFormat(){
+	public boolean read(){
 		
+		boolean res = false;
+		ConnectDB db = new ConnectDB();
+		
+		try {
+			String sqlRead0 = "SELECT Id, Label, Language, Description FROM Format "
+							+ "WHERE Id='"+this.id+"'";
+			ResultSet result0 = db.ReadDB(sqlRead0);
+			
+			if (!result0.next()) {
+				System.out.println("Format already exist");
+			}
+			else
+			{
+				System.out.println(result0.getString(0));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.CloseDB();
+		}
+		
+		return res;
 	}
 	
-	public void updateFormat(String label, String language, String description){
+	public boolean update(String label, String language, String description){
 		
+		boolean res = false;
+		ConnectDB db = new ConnectDB();
+		
+		try {
+			String sqlUpdate0 = "UPDATE Format "
+					+ "SET Label='"+label+"' AND Language='"+language+"' AND Description='"+description+"'"
+					+ "WHERE Id='"+this.id+"'";
+			if (db.WriteDB(sqlUpdate0) != null) {
+				res = true;
+			} else {
+				res = false;
+			}
+			
+			
+		} finally {
+			db.CloseDB();
+		}
+		
+		return res;
 	}
 	
-	public void deleteFormat(){
+	public boolean delete(){
 		
+		boolean res = false;
+		ConnectDB db = new ConnectDB();
+		
+		try {
+			String sqlDelete0 = "DELETE FROM Format WHERE Id='"+this.id+"'";
+//			db.WriteDB(sqlDelete0);
+			if (db.WriteDB(sqlDelete0) != null) {
+				res = true;
+			} else {
+				res = false;
+			}
+			
+		} finally {
+			db.CloseDB();
+		}
+		
+		return res;
 	}
 
 	//GETTERS & SETTERS
