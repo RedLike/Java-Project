@@ -19,12 +19,18 @@ public class UserAdmin implements ADM {
 		super();
 	}
 	
-	public UserAdmin(String name, String login, String password) {
+	public UserAdmin(String login, String password) {
 		this();
 		this.id = null;
-		this.name = name;
+		this.name = null;
 		this.login = login;
 		this.password = password;
+	}
+	
+	public UserAdmin(String name, String login, String password) {
+		this(login, password);
+		this.id = null;
+		this.name = name;
 	}
 	
 	
@@ -70,6 +76,39 @@ public class UserAdmin implements ADM {
 	}
 	
 	
+	
+	// FUNCTION
+	public boolean login() {
+		boolean res = false;
+		ConnectDB db = new ConnectDB();
+		
+		try {
+			String sqlRead0 = "SELECT Id, Name, Login, Password FROM UserAdmin "
+							+ "WHERE Login='"+this.login+"' AND Password='"+this.password+"'";
+			ResultSet result0 = db.ReadDB(sqlRead0);
+			
+			if (result0.next()) {
+				
+				setId(result0.getInt("Id"));
+//				System.out.println(result0.getInt("Id"));
+				setName(result0.getString("Name"));
+//				System.out.println(result0.getString("Name"));
+				res = true;
+				
+			} else {
+				res = false;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			db.CloseDB();
+		}
+		
+		return res;
+	}
+		
 	
 	
 	//CRUD
