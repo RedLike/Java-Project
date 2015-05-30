@@ -2,46 +2,58 @@ package Common;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import API.ConnectDB;
 
 public class Movie {
 	
 	private int id;
+	private int idMovieDB;
 	private String name;
-	private String duration;
+	private int duration;
 	private String description;
 	private String genre;
 	private String author;
 	private String producer;
 	private String releaseDate;
 	private Format format;
+	private String image;
 	
-	public Movie(String name, String duration, String description, String genre, String author, String producer, String releaseDate, Format format) {
+	private Movie() {
 		super();
+	}
+	
+	public Movie(String name, int idMovieDB, String image, String description, String releaseDate) {
+		this();
 		this.name = name;
-		this.duration = duration;
 		this.description = description;
-		this.genre = genre;
-		this.author = author;
-		this.producer = producer;
 		this.releaseDate = releaseDate;
+		this.image = image;
+		this.idMovieDB = idMovieDB;
+	}
+	
+	public Movie(String name, int idMovieDB, String image, String description, String releaseDate, String producer, String genre, int duration, Format format) {
+		this(name, idMovieDB, image, description, releaseDate);
+		this.duration = duration;
+		this.genre = genre;
 		this.format = format;
+		this.producer = producer;
 	}
 
 	//CRUD
-	public boolean create(String name, String duration, String description, String genre, String author, String producer, String releaseDate, Format format) {
+	public boolean create() {
 		
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Name, Duration, Description, Genre, Author, Producer, ReleaseDate, Id_Format FROM Format "
-							+ "WHERE Name='"+name+"' AND Duration='"+duration+"' AND Description='"+description+"' AND Genre='"+genre+"' AND Author='"+author+"' AND Producer='"+producer+"' AND ReleaseDate='"+releaseDate+"' AND Id_Format='"+format.getId()+"'";
+			String sqlRead0 = "SELECT Id, idMovieDB, Name, Duration, Genre, Producer, ReleaseDate, Id_Format FROM Movie "
+							+ "WHERE Name='"+this.name+"' AND idMovieDB='"+this.idMovieDB+"' AND Duration='"+this.duration+"' AND Genre='"+this.genre+"' AND Producer='"+this.producer+"' AND ReleaseDate='"+this.releaseDate+"' AND Id_Format='"+this.format.getId()+"'";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
-				String sqlInsert0 = "INSERT INTO Movie(Name, Duration, Description, Genre, Author, Producer, ReleaseDate, Id_Format) VALUES('"+name+"', '"+duration+"', '"+description+"', '"+genre+"', '"+author+"', '"+producer+"', '"+releaseDate+"', '"+format.getId()+"')";
+				String sqlInsert0 = "INSERT INTO Movie(Name, idMovieDB, Image, Duration, Description, Genre, Producer, ReleaseDate, Id_Format) VALUES('"+this.name+"', '"+this.idMovieDB+"', '"+this.image+"', '"+this.duration+"', '"+this.description+"', '"+this.genre+"', '"+this.producer+"', '"+this.releaseDate+"', '"+this.format.getId()+"')";
 				System.out.println(sqlInsert0);
 				db.WriteDB(sqlInsert0);
 				
@@ -55,7 +67,7 @@ public class Movie {
 			} else {
 //				result0.next();
 				setId(result0.getInt(1));
-				System.out.println("Format already exist");
+				System.out.println("Movie already exist");
 				res = false;
 			}
 			
@@ -74,8 +86,8 @@ public class Movie {
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Name, Duration, Description, Genre, Author, Producer, ReleaseDate, Id_Format FROM Format "
-							+ "WHERE Name='"+name+"' AND Duration='"+duration+"' AND Description='"+description+"' AND Genre='"+genre+"' AND Author='"+author+"' AND Producer='"+producer+"' AND ReleaseDate='"+releaseDate+"' AND Id_Format='"+format.getId()+"'";
+			String sqlRead0 = "SELECT Id, Name, Duration, Description, Genre, Producer, ReleaseDate, Id_Format FROM Movie "
+							+ "WHERE Name='"+name+"' AND Duration='"+duration+"' AND Description='"+description+"' AND Genre='"+genre+"' AND Producer='"+producer+"' AND ReleaseDate='"+releaseDate+"' AND Id_Format='"+format.getId()+"'";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
@@ -95,14 +107,14 @@ public class Movie {
 		return res;
 	}
 	
-	public boolean update(String name, String duration, String description, String genre, String author, String producer, String releaseDate, Format format){
+	public boolean update(){
 		
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlUpdate0 = "UPDATE Format "
-					+ "SET Name='"+name+"' AND Duration='"+duration+"' AND Description='"+description+"' AND Genre='"+genre+"' AND Author='"+author+"' AND Producer='"+producer+"' AND ReleaseDate='"+releaseDate+"' AND Id_Format='"+format.getId()+"'"
+			String sqlUpdate0 = "UPDATE Movie "
+					+ "SET Name='"+this.name+"' AND Image='"+this.image+"' AND Duration='"+this.duration+"' AND Description='"+this.description+"' AND Genre='"+this.genre+"' AND Producer='"+this.producer+"' AND ReleaseDate='"+this.releaseDate+"' AND Id_Format='"+this.format.getId()+"'"
 					+ "WHERE Id='"+this.id+"'";
 			if (db.WriteDB(sqlUpdate0) != null) {
 				res = true;
@@ -139,6 +151,55 @@ public class Movie {
 		return res;
 	}
 	
+	
+	// FUNCTION
+	public ArrayList<FilmShow> listFilmShow(ArrayList<Room> roomList, ArrayList<Cinema> cinemaList)
+	 {
+	  ArrayList<FilmShow> alListFilmShow = new ArrayList<>();
+	  
+	  ConnectDB db = new ConnectDB();
+	   
+	  try {
+	   String sqlRead0 = "SELECT * FROM filmshow WHERE Id_Movie="+this.getId()+";";
+	   ResultSet res = db.ReadDB(sqlRead0);
+	   
+	   
+	   while(res.next())
+	   {
+	    Room room = new Room();
+
+	    for (Room roomElement : roomList) {
+	     if(res.getInt(6)==roomElement.getId())
+	     {
+	      room = roomElement;
+	     }
+	    }
+	    
+	   
+//	    alListFilmShow.add(new FilmShow(res.getInt(1), res.getDate(2), res.getDate(3), res.getBoolean(4), this, room));
+	   }
+	   
+	  } catch (SQLException e) {
+	   e.printStackTrace();
+	  } finally {
+	   db.CloseDB();
+	  }
+	  
+	  return alListFilmShow;
+	 }
+	 
+	 public void deleteFilmShow(ArrayList<FilmShow> filmShowList)
+	 {
+	  for (FilmShow filmShow : filmShowList) {
+	   if(filmShow.getMovie().getId()==this.getId())
+	   {
+	    filmShow.delete();
+	   }
+	  }
+	 }
+	
+	
+	
 	//GETTERS & SETTERS
 	
 	public int getId() {
@@ -157,11 +218,11 @@ public class Movie {
 		this.name = name;
 	}
 
-	public String getDuration() {
+	public int getDuration() {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 
@@ -211,5 +272,21 @@ public class Movie {
 
 	public void setFormat(Format format) {
 		this.format = format;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	public int getIdMovieDB() {
+		return idMovieDB;
+	}
+
+	public void setIdMovieDB(int idMovieDB) {
+		this.idMovieDB = idMovieDB;
 	}
 }
