@@ -13,14 +13,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Class permettant d'utiliser l'API "The Movie DB" afin de récuperer les informations sur des films depuis le site Th Movie DB.
+ */
 
 public class TheMovieDB {
 
@@ -28,7 +27,6 @@ public class TheMovieDB {
 	private String apiKey;
 	private JSONObject json;
 
-	private boolean initialized;
 
 	/**
 	 * Constructeur par défaut
@@ -38,22 +36,18 @@ public class TheMovieDB {
 		this.apiUrl = "https://api.themoviedb.org/3/";
 		this.apiKey = "1d15fc6e7ee80f72efda46176ed01d8a";
 
-		initialized = true;
 	}
 
 	
 	/**
 	 * Cette méthode permet de télécharger un fichier JSON depuis une URL
 	 * @param query Qui est la requête pour TheMovieDB API
-	 * @return booleen "true" si le JSON a été récupéré, "false" sinon
+	 * @return booleen "true" si le JSON a été récupéré, dans le cas inverse retourne "false"
 	 * @throws JSONException 
 	 */
 	private boolean downloadJson(String query) throws JSONException {
-		if(!initialized) return false;
-
 		String urlString = apiUrl + query;
 		urlString += (query.indexOf("?") > -1) ? "&" : "?";
-//		urlString += "api_key=" + apiKey + "&language=" + apiLang;
 		urlString += "api_key=" + apiKey;
 
 		try{
@@ -79,6 +73,12 @@ public class TheMovieDB {
 	}
 	
 
+	/**
+	 * Méthode appelée pour récuperé la liste des derniers films à l'affiche
+	 * @param listFormat afin de récupérer uniquement les films dont la langue est supportée
+	 * @return List<movie> Retourne une list de tous les films récent
+	 * @throws JSONException 
+	 */
 	public List<Movie> Discover(ArrayList<Format> listFormat) throws JSONException {
 		List<Movie> moviesDiscover = null;
 		if(downloadJson("discover/movie?")) {
@@ -86,7 +86,6 @@ public class TheMovieDB {
 			
 			JSONArray jsonArray = getJson().getJSONArray("results");
 			for(int i = 0; i < jsonArray.length(); i++) {
-//				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 				int idMovieDB = 0;
 				String original_title = null;
@@ -118,58 +117,27 @@ public class TheMovieDB {
 				}	
 					
 				Movie movie = new Movie(original_title, idMovieDB, poster_path, overview, release_date);
-
-
 				getInfos(movie, listFormat);
 				
 				moviesDiscover.add(movie);
 			}
-			
-			
 		}
-		
 		return moviesDiscover;
 	}
 	
-//	public List<Movie> search(String title) {
-//		List<Movie> movies = null;
-//
-//		if(downloadJson("search/movie?query=" + title)) {
-//			movies = new ArrayList<>();
-//
-//			JSONArray jsonArray = getJson().getJSONArray("results");
-//			for(int i = 0; i < jsonArray.length(); i++) {
-//				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//
-//				JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-//				try {
-//					Movie movie = new Movie();
-//					if(!jsonObject.isNull("id"))
-//						movie.setId(jsonObject.getInt("id"));
-//					if(!jsonObject.isNull("original_title"))
-//						movie.setLabel(jsonObject.getString("original_title"));
-//					if(!jsonObject.isNull("release_date"))
-//						movie.setDate(simpleDateFormat.parse(jsonObject.getString("release_date")));
-//
-//					getInfos(movie);
-//					movies.add(movie);
-//				} catch(ParseException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//
-//		return movies;
-//	}
 	
 	
-
+	/**
+	 * Méthode de récuperer des informations plus précise sur un film
+	 * @param movieFromSearch est le film necessitant de faire une recherche complémentaire
+	 * @param listFormat afin de vérifier si le film est disponible dans le format demandé (langue)
+	 * @return Movie Retourne l'objet Movie complété
+	 */
 	public Movie getInfos(Movie movieFromSearch, ArrayList<Format> listFormat) {
 		Movie movie = null;
 
 		try {
 			if(downloadJson("movie/" + movieFromSearch.getIdMovieDB())) {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 				JSONObject jsonObject = getJson();
 				if(!jsonObject.isNull("runtime"))
@@ -200,8 +168,6 @@ public class TheMovieDB {
 					
 					format = jsonObject.getJSONArray("spoken_languages").get(0).toString();
 					format = format.substring(9,format.indexOf("\",\"",9));
-//					System.out.println("testo");
-//					System.out.println(listFormat.size());
 					
 					for(Format x : listFormat) {
 						if (x.getLabel().equals(format.toString()) ) {
@@ -209,46 +175,7 @@ public class TheMovieDB {
 						}
 					}
 				}
-					
-				
-				System.out.println(movieFromSearch.getName());
-				
-//				System.out.println(jsonObject.getInt("runtime")+" == "+movieFromSearch.getDuration());
-//				
-//				JSONArray compagniep = jsonObject.getJSONArray("production_companies");
-//				Object compa = compagniep.get(0);
-//				String compagni = compa.toString();
-//				compagni = compagni.substring(9,compagni.indexOf("\",\"",7));
-//				System.out.println(compagni+" == "+movieFromSearch.getProducer());
-//				
-//				JSONArray genrep = jsonObject.getJSONArray("genres");
-//				Object gen = genrep.get(0);
-//				String ge = gen.toString();
-//				ge = ge.substring(9,ge.indexOf("\",\"",9));
-//				System.out.println(ge+" == "+movieFromSearch.getGenre());
-//				
-//				JSONArray formatp = jsonObject.getJSONArray("spoken_languages");
-//				Object forma = formatp.get(0);
-//				String form = forma.toString();
-//				form = form.substring(9,form.indexOf("\",\"",9));
-//				String readFormat = "SELECT id, Label, Language, Description FROM format";
-//				ConnectDB db = new ConnectDB();
-//				ResultSet resultat = db.ReadDB(readFormat);
-//				try {
-//					while (resultat.next()) {
-////						System.out.println(resultat.getString("Label"));
-////						System.out.println(form);
-//						if (resultat.getString("Label").toString().equals(form.toString()) ) {
-//							System.out.println(form+" == "+movieFromSearch.getFormat().getLabel());
-//						}
-//
-//					}
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				db.CloseDB();
-////				System.out.println(form+" == "+movieFromSearch.getFormat().getLabel());
+//				System.out.println(movieFromSearch.getName());
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -259,7 +186,10 @@ public class TheMovieDB {
 	}
 	
 	
-	
+	/**
+	 * Méthode permettant d'inserer les films en base de données
+	 * @param listMovie est la liste des films à ajouter
+	 */
 	public void Insert(List<Movie> listMovie) {
 		for(Movie movie : listMovie) {
 			movie.create();
@@ -270,18 +200,22 @@ public class TheMovieDB {
 	
 	
 	//GETTERS & SETTERS
+	@SuppressWarnings("unused")
 	private String getApiKey() {
 		return apiKey;
 	}
 
+	@SuppressWarnings("unused")
 	private void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
+	@SuppressWarnings("unused")
 	private String getApiUrl() {
 		return apiUrl;
 	}
 
+	@SuppressWarnings("unused")
 	private void setApiUrl(String apiUrl) {
 		this.apiUrl = apiUrl;
 	}
@@ -290,16 +224,9 @@ public class TheMovieDB {
 		return json;
 	}
 
+	@SuppressWarnings("unused")
 	private void setJson(JSONObject json) {
 		this.json = json;
-	}
-
-	private boolean isInitialized() {
-		return initialized;
-	}
-
-	private void setInitialized(boolean initialized) {
-		this.initialized = initialized;
 	}
 
 }

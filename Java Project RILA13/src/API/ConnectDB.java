@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+/**
+ * Class permettant d'établir une connexion à la base de donnée ainsi que d'y faire des requètes SQL
+ */
+
 public class ConnectDB {
 
 	private String url;
@@ -16,7 +20,9 @@ public class ConnectDB {
 	private Connection cn;
 	private Statement st;
 	
-	
+	/**
+	 * Constructeur par défaut
+	 */
 	public ConnectDB() {
 		super();
 		this.databaseName = "cesi_java";
@@ -43,18 +49,17 @@ public class ConnectDB {
 	}
 	
 	
+	/**
+	 * Cette méthode permet d'éxecuter un requète SQL de type "SELECT"
+	 * @param sql est la requète sql à effectuer
+	 * @return ResultSet est le résultat retourné par la requète
+	 */
 	@SuppressWarnings("finally")
 	public ResultSet ReadDB(String sql) {
 		ResultSet rs = null;
 		try {
 			//exécution de la requète
 			rs = this.st.executeQuery(sql);
-			//parcours résultat
-//			while (rs.next()) {
-//				System.out.println(rs.getString(1));
-//			}
-			// Retourne résultat
-//			return rs;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,28 +70,31 @@ public class ConnectDB {
 		
 	}
 	
-
+	/**
+	 * Cette méthode permet d'éxecuter un requète SQL de type "INSERT, UPDATE, DELETE"
+	 * @param sql est la requète sql à effectuer
+	 * @return Integer est le résultat retourné par la requète
+	 */
+	@SuppressWarnings("finally")
 	public Integer WriteDB(String sql) {
 		Integer rs = null;
 		try {
 			//exécution de la requète
 			rs = this.st.executeUpdate(sql);
-			//parcours résultat
-//			while (rs.next()) {
-//				System.out.println(rs.getString(1));
-//			}
-			// Retourne résultat
-//			return rs;
-			
+				
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			// Retourne résultat
+			return rs;
 		}
-		return rs;
 		
 	}
 	
 	
-	
+	/**
+	 * Cette méthode permet de fermer la connexion actuel.
+	 */
 	public void CloseDB() {
 		try {
 			//Libère ressources de la mémoire
@@ -102,9 +110,78 @@ public class ConnectDB {
 	
 	
 	
+	//GETTERS & SETTERS
 	
-	
-	
+	@SuppressWarnings("unused")
+	private String getUrl() {
+		return url;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setUrl(String url) {
+		this.url = url;
+	}
+
+
+	@SuppressWarnings("unused")
+	private String getLogin() {
+		return login;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setLogin(String login) {
+		this.login = login;
+	}
+
+
+	@SuppressWarnings("unused")
+	private String getPasswd() {
+		return passwd;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+
+
+	@SuppressWarnings("unused")
+	private String getDatabaseName() {
+		return databaseName;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
+	}
+
+
+	@SuppressWarnings("unused")
+	private Connection getCn() {
+		return cn;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setCn(Connection cn) {
+		this.cn = cn;
+	}
+
+
+	@SuppressWarnings("unused")
+	private Statement getSt() {
+		return st;
+	}
+
+
+	@SuppressWarnings("unused")
+	private void setSt(Statement st) {
+		this.st = st;
+	}
 	
 	
 	
