@@ -154,7 +154,7 @@ public class UserAdmin implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt("Id"));
+				setId(result1.getInt(1));
 				res = true;
 				
 			} else {

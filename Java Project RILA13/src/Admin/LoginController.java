@@ -1,10 +1,9 @@
 package Admin;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,12 +21,7 @@ public class LoginController {
 	private TextField passwordInput;
 	@FXML
 	private Button connexionButton;
-	@FXML
-	private ComboBox<String> cinemaCombo;
-	@FXML
-	private Label cinemaLabel;
-	@FXML
-	private Label loginLabel;
+	
 	
 	
 	//CONSTRUCTOR
@@ -45,32 +39,40 @@ public class LoginController {
 	 */
 	@FXML
 	private void connexion(ActionEvent e) {
-		if(!loginInput.getText().isEmpty() && !passwordInput.getText().isEmpty()) {
-			
-			UserAdmin admin = new UserAdmin(loginInput.getText(), passwordInput.getText());
-			if (admin.login()) {
-				System.out.println(cinemaLabel.getText());
-				System.out.println("User Connected");
-				System.out.println("Name : "+admin.getName());
-				System.out.println("Login : "+admin.getLogin());
-				
-				Button button = (Button) e.getSource();
-				Stage stage = (Stage) button.getScene().getWindow();
-				stage.close();
-				
-				@SuppressWarnings("unused")
-				ManageForm manageForm = new ManageForm(stage);
-				
-			} else {
-				System.out.println("Bad Username/Password");
-			}
-				
-		}
-		else {
-			System.out.println("empty field");
-		}
+		
+		Button button = (Button) e.getSource();
+		Stage stage = (Stage) button.getScene().getWindow();
+		stage.close();
+		
+		@SuppressWarnings("unused")
+		ManageForm manageForm = new ManageForm(stage);
+		
+//		if(!loginInput.getText().isEmpty() && !passwordInput.getText().isEmpty()) {
+//			
+//			UserAdmin admin = new UserAdmin(loginInput.getText(), passwordInput.getText());
+//			if (admin.login()) {
+//				System.out.println("User Connected");
+//				System.out.println("Name : "+admin.getName());
+//				System.out.println("Login : "+admin.getLogin());
+//				
+//				Button button = (Button) e.getSource();
+//				Stage stage = (Stage) button.getScene().getWindow();
+//				stage.close();
+//				
+//				@SuppressWarnings("unused")
+//				ManageForm manageForm = new ManageForm(stage);
+//				
+//			} else {
+//				System.out.println("Bad Username/Password");
+//			}
+//				
+//		}
+//		else {
+//			System.out.println("empty field");
+//		}
 		
 	}
+	
 
 
 		

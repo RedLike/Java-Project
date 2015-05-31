@@ -15,7 +15,7 @@ public class LoginForm {
 
 	
 	private Stage stage;
-	
+		
 	
 	//CONSTRUCTOR
 	/**
@@ -36,15 +36,17 @@ public class LoginForm {
 		try {
 			this.stage = stage;
 			this.stage.setTitle("Authentification");
-			Parent root = FXMLLoader.load(ManageForm.class.getResource("LoginForm.fxml"));
+			Parent root = FXMLLoader.load(LoginForm.class.getResource("LoginForm.fxml"));
 			this.stage.setScene(new Scene(root));
-			this.stage.show();
+			this.stage.show();		
 						
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	
 	//GETTERS & SETTERS

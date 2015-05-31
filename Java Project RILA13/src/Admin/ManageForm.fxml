@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -27,29 +28,61 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TitledPane fx:id="titlePane" layoutY="27.0" prefHeight="575.0" prefWidth="800.0">
-         <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <bottom>
-                  <Pane prefHeight="53.0" prefWidth="779.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.22932330827067668" layoutY="26.0" prefHeight="575.0" prefWidth="800.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="573.0" prefWidth="171.0">
+               <children>
+                  <Button fx:id="btnCinema" layoutX="44.0" layoutY="118.0" mnemonicParsing="false" onAction="#displayTabCinemaAll" prefHeight="25.0" prefWidth="93.0" text="Cinema" />
+                  <Button fx:id="btnMovies" layoutX="44.0" layoutY="161.0" mnemonicParsing="false" onAction="#displayTabMoviesAll" prefHeight="25.0" prefWidth="93.0" text="Movies" />
+                  <Button fx:id="btnUsers" layoutX="44.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="Users" />
+                  <Button layoutX="44.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="Button" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Group fx:id="grpCinema" layoutX="141.0" layoutY="167.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="btnNew" layoutX="297.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="New" />
-                        <Button fx:id="btnEdit" layoutX="428.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Edit" />
-                        <Button fx:id="btnDelete" layoutX="540.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Delete" />
+                        <TabPane fx:id="tabPaneCinema" prefHeight="570.0" prefWidth="612.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                              <Tab fx:id="tabCinema" text="Cinema">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView fx:id="listViewCinema" layoutX="14.0" layoutY="20.0" prefHeight="503.0" prefWidth="200.0" />
+                                          <Label layoutX="272.0" layoutY="98.0" prefHeight="17.0" prefWidth="46.0" text="City :" />
+                                          <TextField fx:id="inCinemaName" layoutX="333.0" layoutY="42.0" prefHeight="25.0" prefWidth="194.0" />
+                                          <Label layoutX="272.0" layoutY="46.0" prefHeight="17.0" prefWidth="46.0" text="Name :" />
+                                          <Label layoutX="272.0" layoutY="184.0" prefHeight="17.0" prefWidth="70.0" text="Address :" />
+                                          <TextArea fx:id="inCinemaAddress" layoutX="272.0" layoutY="209.0" prefHeight="71.0" prefWidth="272.0" />
+                                          <TextField fx:id="inCinemaCity" layoutX="333.0" layoutY="94.0" prefHeight="25.0" prefWidth="194.0" />
+                                          <TextField fx:id="inCinemaId" layoutX="333.0" layoutY="136.0" prefHeight="25.0" prefWidth="194.0" />
+                                          <Button fx:id="btnCinemaAdd" layoutX="269.0" layoutY="335.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="25.0" prefWidth="67.0" text="Add" />
+                                          <Button fx:id="btnCinemaModify" disable="true" layoutX="363.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Modify" />
+                                          <Button fx:id="btnCinemaDelete" disable="true" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Delete" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
+                            <Tab fx:id="tabRoom" text="Room">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="32.0" />
+                              </content>
+                            </Tab>
+                            <Tab fx:id="tabTerminal" text="Terminal">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="618.0" />
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
                      </children>
-                  </Pane>
-               </bottom>
-               <right>
-                  <TitledPane fx:id="detailManage" prefHeight="477.0" prefWidth="387.0" text="Detail" BorderPane.alignment="CENTER" />
-               </right>
-               <center>
-                  <ListView fx:id="listObject" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-               </center>
-               <left>
-                  <FlowPane fx:id="flowCategories" prefHeight="477.0" prefWidth="121.0" BorderPane.alignment="CENTER" />
-               </left>
-            </BorderPane>
-         </content>
-      </TitledPane>
+                  </Group>
+                  <Group fx:id="grpMovies" layoutX="125.0" layoutY="205.0" visible="false" />
+                  <Group fx:id="grpUsers" layoutX="239.0" layoutY="230.0" visible="false" />
+                  <Group layoutX="211.0" layoutY="194.0" visible="false" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
    </children>
 </Pane>

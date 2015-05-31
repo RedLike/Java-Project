@@ -9,15 +9,13 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.00009999999747" prefWidth="343.9998779296875" style="-fx-background-color: &#10;        #707070,&#10;        linear-gradient(#fcfcfc, #f3f3f3),&#10;        linear-gradient(#f2f2f2 0%, #ebebeb 49%, #dddddd 50%, #cfcfcf 100%);&#10;    -fx-background-insets: 0,1,2;&#10;    -fx-background-radius: 3,2,1;&#10;    -fx-padding: 3 30 3 30;&#10;    -fx-text-fill: black;&#10;    -fx-font-size: 14px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Admin.LoginController">
   <children>
-    <GridPane alignment="BASELINE_CENTER" layoutX="43.0" layoutY="55.0" prefHeight="139.0" prefWidth="264.0">
+    <GridPane alignment="BASELINE_CENTER" layoutX="40.0" layoutY="44.0" prefHeight="139.0" prefWidth="264.0">
       <children>
-        <Label fx:id="loginLabel" text="Login :" />
-        <Label text="Password :" GridPane.rowIndex="1" />
-        <PasswordField id="password" fx:id="passwordInput" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <TextField id="login" fx:id="loginInput" prefWidth="200.0" GridPane.columnIndex="1" />
-        <Button mnemonicParsing="false" onAction="#connexion" text="Connection" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <Label fx:id="cinemaLabel" text="Cinema :" GridPane.rowIndex="2" />
-            <ComboBox fx:id="cinemaCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Label text="Login :" GridPane.rowIndex="1" />
+        <Label text="Password :" GridPane.rowIndex="2" />
+        <PasswordField id="password" fx:id="passwordInput" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField id="login" fx:id="loginInput" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Button fx:id="connexionButton" mnemonicParsing="false" onAction="#connexion" text="Connection" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="91.0" />
@@ -30,7 +28,7 @@
         <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="35.0" valignment="CENTER" vgrow="NEVER" />
       </rowConstraints>
     </GridPane>
-    <Label alignment="CENTER" layoutX="104.0" layoutY="21.0" minHeight="22.000091552734375" prefHeight="22.000091552734375" text="Authentication">
+    <Label alignment="CENTER" layoutX="107.0" layoutY="33.0" minHeight="22.000091552734375" prefHeight="22.000091552734375" text="Authentication">
       <font>
         <Font size="20.0" />
       </font>
