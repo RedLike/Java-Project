@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import API.ConnectDB;
+import Interface.ADM;
 
-public class Movie {
+public class Movie implements ADM{
 	
 	private int id;
 	private int idMovieDB;
@@ -153,41 +154,20 @@ public class Movie {
 	
 	
 	// FUNCTION
-	public ArrayList<FilmShow> listFilmShow(ArrayList<Room> roomList, ArrayList<Cinema> cinemaList)
+	public ArrayList<FilmShow> listFilmShow(ArrayList<FilmShow> filmShowList)
 	 {
-	  ArrayList<FilmShow> alListFilmShow = new ArrayList<>();
+	  ArrayList<FilmShow> listFilmShowToMovie = new ArrayList<>();
 	  
-	  ConnectDB db = new ConnectDB();
-	   
-	  try {
-	   String sqlRead0 = "SELECT * FROM filmshow WHERE Id_Movie="+this.getId()+";";
-	   ResultSet res = db.ReadDB(sqlRead0);
-	   
-	   
-	   while(res.next())
-	   {
-	    Room room = new Room();
-
-	    for (Room roomElement : roomList) {
-	     if(res.getInt(6)==roomElement.getId())
-	     {
-	      room = roomElement;
-	     }
-	    }
-	    
-	   
-//	    alListFilmShow.add(new FilmShow(res.getInt(1), res.getDate(2), res.getDate(3), res.getBoolean(4), this, room));
-	   }
-	   
-	  } catch (SQLException e) {
-	   e.printStackTrace();
-	  } finally {
-	   db.CloseDB();
+	  for (FilmShow filmShow : filmShowList){
+		  if (filmShow.getMovie().getId() == this.getId()) {
+			  listFilmShowToMovie.add(filmShow);
+		  }					  
 	  }
 	  
-	  return alListFilmShow;
+	  return listFilmShowToMovie;
 	 }
 	 
+	
 	 public void deleteFilmShow(ArrayList<FilmShow> filmShowList)
 	 {
 	  for (FilmShow filmShow : filmShowList) {

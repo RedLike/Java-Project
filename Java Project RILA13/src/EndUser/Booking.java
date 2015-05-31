@@ -14,7 +14,6 @@ public class Booking implements ADM{
 	private Date hour;
 	private Date date;
 	private FilmShow filmshow;
-	private Terminal terminal;
 	
 	
 	//CONSTRUCTORS
@@ -23,18 +22,16 @@ public class Booking implements ADM{
 	}
 
 
-	public Booking(Date hour, Date date, FilmShow filmshow, Terminal terminal) {
+	public Booking(Date hour, Date date, FilmShow filmshow) {
 		this();
 		this.hour = hour;
 		this.date = date;
 		this.filmshow = filmshow;
-		this.terminal = terminal;
 	}
 
 
-	public Booking(Integer id, Date hour, Date date, FilmShow filmshow,
-			Terminal terminal) {
-		this(hour, date, filmshow, terminal);
+	public Booking(Integer id, Date hour, Date date, FilmShow filmshow) {
+		this(hour, date, filmshow);
 		this.id = id;
 	}
 
@@ -79,18 +76,6 @@ public class Booking implements ADM{
 		this.filmshow = filmshow;
 	}
 
-
-	public Terminal getTerminal() {
-		return terminal;
-	}
-
-
-	public void setTerminal(Terminal terminal) {
-		this.terminal = terminal;
-	}
-
-
-	
 	//CRUD
 		@Override
 		public boolean create() {
@@ -102,12 +87,12 @@ public class Booking implements ADM{
 			try {
 				String sqlRead0 = "SELECT Id, Hour, Date, Id_FilmShow, Id_Terminal FROM Booking "
 								+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"'"
-								+ "AND Id_FilmShow='"+this.filmshow.getId()+"' AND Id_Terminal='"+this.terminal.getId()+"'";
+								+ "AND Id_FilmShow='"+this.filmshow.getId()+"'";
 				ResultSet result0 = db.ReadDB(sqlRead0);
 				
 				if (!result0.next()) {
-					String sqlInsert0 = "INSERT INTO Booking(Hour, Date, Id_FilmShow, Id_Terminal) "
-							+ "VALUES('"+this.hour+"', '"+this.date+"', '"+this.filmshow.getId()+"', '"+this.terminal.getId()+"')";
+					String sqlInsert0 = "INSERT INTO Booking(Hour, Date, Id_FilmShow) "
+							+ "VALUES('"+this.hour+"', '"+this.date+"', '"+this.filmshow.getId()+"')";
 					System.out.println(sqlInsert0);
 					db.WriteDB(sqlInsert0);
 					
@@ -145,7 +130,7 @@ public class Booking implements ADM{
 			try {
 				String sqlUpdate0 = "UPDATE Booking "
 						+ "SET Hour='"+this.hour+"', Date='"+this.date+"'"
-						+ ", Id_FilmShow='"+this.filmshow.getId()+"', Id_Terminal='"+this.terminal.getId()+"'"
+						+ ", Id_FilmShow='"+this.filmshow.getId()+"'"
 						+ "WHERE Id='"+this.id+"'";
 				if (db.WriteDB(sqlUpdate0) != null) {
 					res = true;

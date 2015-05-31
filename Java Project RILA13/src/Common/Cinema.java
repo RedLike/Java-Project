@@ -93,12 +93,12 @@ public class Cinema implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt(1));
+				setId(result1.getInt("Id"));
 				res = true;
 				
 			} else {
 //				result0.next();
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("Cinéma already exist");
 				res = false;
 			}

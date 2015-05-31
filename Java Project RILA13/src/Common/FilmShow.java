@@ -18,7 +18,6 @@ public class FilmShow implements ADM {
 	private boolean visibility;
 	private Movie movie;
 	private Room room;
-	private Cinema cinema;
 	
 	
 	//CONSTRUCTORS
@@ -28,20 +27,19 @@ public class FilmShow implements ADM {
 
 
 	public FilmShow(Date hour, Date date, boolean visibility, Movie movie,
-			Room room, Cinema cinema) {
+			Room room) {
 		this();
 		this.hour = hour;
 		this.date = date;
 		this.visibility = visibility;
 		this.movie = movie;
 		this.room = room;
-		this.cinema = cinema;
 	}
 
 
 	public FilmShow(Integer id, Date hour, Date date, boolean visibility,
-			Movie movie, Room room, Cinema cinema) {
-		this(hour, date, visibility, movie, room, cinema);
+			Movie movie, Room room) {
+		this(hour, date, visibility, movie, room);
 		this.id = id;
 	}
 
@@ -110,16 +108,6 @@ public class FilmShow implements ADM {
 	}
 
 
-	public Cinema getCinema() {
-		return cinema;
-	}
-
-
-	public void setCinema(Cinema cinema) {
-		this.cinema = cinema;
-	}
-
-
 
 	
 	
@@ -132,16 +120,15 @@ public class FilmShow implements ADM {
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Hour, Date, Visibility, Id_Movie, Id_Room, Id_Cinema FROM FilmShow "
+			String sqlRead0 = "SELECT Id, Hour, Date, Visibility, Id_Movie, Id_Room FROM FilmShow "
 							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"' AND Visibility='"+this.visibility+"'"
-							+ " AND Id_Movie='"+this.movie.getId()+"' AND Id_Room='"+this.room.getId()+"' "
-							+ "AND Id_Cinema='"+this.cinema.getId()+"'";
+							+ " AND Id_Movie='"+this.movie.getId()+"' AND Id_Room='"+this.room.getId()+"' ";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
-				String sqlInsert0 = "INSERT INTO FilmShow(Hour, Date, Visibility, Id_Movie, Id_Room, Id_Cinema) "
+				String sqlInsert0 = "INSERT INTO FilmShow(Hour, Date, Visibility, Id_Movie, Id_Room) "
 						+ "VALUES('"+this.hour+"', '"+this.date+"', '"+this.visibility+"', '"+this.movie.getId()+"'"
-						+ ", '"+this.room.getId()+"', '"+this.cinema.getId()+"')";
+						+ ", '"+this.room.getId()+"')";
 				System.out.println(sqlInsert0);
 				db.WriteDB(sqlInsert0);
 				
@@ -149,12 +136,12 @@ public class FilmShow implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt(1));
+				setId(result1.getInt("Id"));
 				res = true;
 				
 			} else {
 //				result0.next();
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("FilmShow already exist");
 				res = false;
 			}
@@ -180,7 +167,6 @@ public class FilmShow implements ADM {
 			String sqlUpdate0 = "UPDATE FilmShow "
 					+ "SET Hour='"+this.hour+"', Date='"+this.date+"', Visibility='"+this.visibility+"'"
 					+ ", Id_Movie='"+this.movie.getId()+"', Id_Room='"+this.room.getId()+"' "
-					+ ", Id_Cinema='"+this.cinema.getId()+"'"
 					+ "WHERE Id='"+this.id+"'";
 			if (db.WriteDB(sqlUpdate0) != null) {
 				res = true;
