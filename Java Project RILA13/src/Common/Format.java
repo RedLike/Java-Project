@@ -13,7 +13,7 @@ public class Format implements ADM{
 	private String language;
 	private String description;
 	
-	private Format() {
+	public Format() {
 		super();
 	}
 	
