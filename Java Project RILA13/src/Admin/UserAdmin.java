@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import API.ConnectDB;
 import Interface.ADM;
 
+/**
+ * Class permettant de gérer les connexion et création des utilisateurs.
+ */
 public class UserAdmin implements ADM {
 
 	private Integer id;
@@ -15,10 +18,17 @@ public class UserAdmin implements ADM {
 	
 	
 	//CONSTRUCTOR
+	/**
+	 * Constructeur par défaut
+	 * "private" car non instanciable sous cette forme
+	 */
 	private UserAdmin() {
 		super();
 	}
 	
+	/**
+	 * Constructeur par défaut pour la fonction "login"
+	 */
 	public UserAdmin(String login, String password) {
 		this();
 		this.id = null;
@@ -27,13 +37,18 @@ public class UserAdmin implements ADM {
 		this.password = password;
 	}
 	
+	/**
+	 * Constructeur par défaut pour la création de compte utilisateur
+	 */
 	public UserAdmin(String name, String login, String password) {
 		this(login, password);
 		this.id = null;
 		this.name = name;
 	}
 	
-	
+	/**
+	 * Constructeur secondaire pour la génération des objets utilisateurs
+	 */
 	public UserAdmin(Integer Id, String name, String login, String password) {
 		this(name, login, password);
 		this.id = Id;
@@ -78,6 +93,10 @@ public class UserAdmin implements ADM {
 	
 	
 	// FUNCTION
+	/**
+	 * Cette méthode permet de vérifier si les "login"/"password" fournit sont correcte
+	 * @return booleen "true" si les informations corresponde avec la BDD, sinon false
+	 */
 	public boolean login() {
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
@@ -90,9 +109,7 @@ public class UserAdmin implements ADM {
 			if (result0.next()) {
 				
 				setId(result0.getInt("Id"));
-//				System.out.println(result0.getInt("Id"));
 				setName(result0.getString("Name"));
-//				System.out.println(result0.getString("Name"));
 				res = true;
 				
 			} else {
@@ -112,6 +129,10 @@ public class UserAdmin implements ADM {
 	
 	
 	//CRUD
+	/**
+	 * Cette méthode permet de créer un utilisateur en base de donné ci celui-ci n'est pas déjà présent
+	 * @return booleen "true" si la création est réussi, "false" si déjà présent
+	 */
 	@Override
 	public boolean create() {
 		// TODO Auto-generated method stub
@@ -133,12 +154,11 @@ public class UserAdmin implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt(1));
+				setId(result1.getInt("Id"));
 				res = true;
 				
 			} else {
-//				result0.next();
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("UserAdmin already exist");
 				res = false;
 			}
@@ -153,7 +173,11 @@ public class UserAdmin implements ADM {
 		return res;
 	}
 
-
+	
+	/**
+	 * Cette méthode permet de mettre à jour un profil utilisateur dans la BDD
+	 * @return booleen "true" si mise à jour réussi, "false" sinon
+	 */
 	@Override
 	public boolean update() {
 		// TODO Auto-generated method stub
@@ -179,6 +203,10 @@ public class UserAdmin implements ADM {
 	}
 	
 
+	/**
+	 * Cette méthode permet de suprimer l'utilisateur de la BDD
+	 * @return booleen "true" si la suppression a été réussi, false sinon
+	 */
 	@Override
 	public boolean delete() {
 		// TODO Auto-generated method stub
@@ -187,7 +215,6 @@ public class UserAdmin implements ADM {
 		
 		try {
 			String sqlDelete0 = "DELETE FROM UserAdmin WHERE Id='"+this.id+"'";
-//			db.WriteDB(sqlDelete0);
 			if (db.WriteDB(sqlDelete0) != null) {
 				res = true;
 			} else {
