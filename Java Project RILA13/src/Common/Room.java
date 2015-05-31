@@ -13,7 +13,7 @@ public class Room implements ADM{
 	private int chair;
 	private Cinema cinema;
 
-	private Room() {
+	public Room() {
 		super();
 	}
 	
@@ -23,6 +23,10 @@ public class Room implements ADM{
 		this.chair = chair;
 		this.cinema = cinema;
 	}
+	public Room(int id, int number, int chair, Cinema cinema) {
+		this(number, chair, cinema);
+		this.id = id;
+	}
 
 	
 	//CRUD
@@ -31,7 +35,7 @@ public class Room implements ADM{
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Number, Chair FROM Room  "
+			String sqlRead0 = "SELECT Id, Number, Chair, Id_Cinema FROM Room  "
 							+ "WHERE Id_Cinema='"+this.cinema.getId()+"' AND Number='"+this.number+"' AND Chair='"+this.chair+"'";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			

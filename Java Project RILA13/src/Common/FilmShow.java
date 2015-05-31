@@ -47,6 +47,53 @@ public class FilmShow implements ADM {
 		this.id = id;
 	}
 
+	
+	
+	
+	// FUNCTION
+	
+	public ArrayList<Booking> listBooking()
+	 {
+	  
+	  ArrayList<Booking> alListBooking = new ArrayList<>();
+	  
+	  ConnectDB dblistbooking = new ConnectDB();
+	   
+	  try {
+	   String sqlRead0 = "SELECT * FROM booking WHERE Id_FilmShow="+this.getId()+";";
+	   ResultSet res = dblistbooking.ReadDB(sqlRead0);
+	   
+	   while(res.next())
+	   {    
+	    alListBooking.add(new Booking(res.getInt(1), res.getDate(2), res.getDate(3), this));
+	   }
+	   
+	  } catch (SQLException e) {
+	   e.printStackTrace();
+	  } finally {
+	   dblistbooking.CloseDB();
+	  }
+	  
+	  return alListBooking;
+	  
+	 }
+	 
+	 public void deleteBooking(ArrayList<Booking> bookingList)
+	 {
+	  for (Booking booking : bookingList) {
+	   if(booking.getFilmshow().getId()==this.getId())
+	   {
+	    booking.delete();
+	   }
+	  }
+	 }
+	 
+	 public int placeLeft()
+	 {
+	  return this.getRoom().getChair()-this.listBooking().size();
+	 }
+		
+		
 
 	
 	
@@ -209,49 +256,6 @@ public class FilmShow implements ADM {
 		return res;
 	}
 	
-	
-	// FUNCTION
-	
-	public ArrayList<Booking> listBooking()
-	 {
-	  
-	  ArrayList<Booking> alListBooking = new ArrayList<>();
-	  
-	  ConnectDB dblistbooking = new ConnectDB();
-	   
-	  try {
-	   String sqlRead0 = "SELECT * FROM booking WHERE Id_FilmShow="+this.getId()+";";
-	   ResultSet res = dblistbooking.ReadDB(sqlRead0);
-	   
-	   while(res.next())
-	   {    
-	    alListBooking.add(new Booking(res.getInt(1), res.getDate(2), res.getDate(3), this));
-	   }
-	   
-	  } catch (SQLException e) {
-	   e.printStackTrace();
-	  } finally {
-	   dblistbooking.CloseDB();
-	  }
-	  
-	  return alListBooking;
-	  
-	 }
-	 
-	 public void deleteBooking(ArrayList<Booking> bookingList)
-	 {
-	  for (Booking booking : bookingList) {
-	   if(booking.getFilmshow().getId()==this.getId())
-	   {
-	    booking.delete();
-	   }
-	  }
-	 }
-	 
-	 public int placeLeft()
-	 {
-	  return this.getRoom().getChair()-this.listBooking().size();
-	 }
 	
 	
 }

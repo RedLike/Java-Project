@@ -24,6 +24,11 @@ public class Format implements ADM{
 		this.description = description;
 	}
 	
+	public Format(int id, String label, String language, String description) {
+		this(label, language, description);
+		this.id = id;
+	}
+	
 	//CRUD
 	public boolean create() {
 		

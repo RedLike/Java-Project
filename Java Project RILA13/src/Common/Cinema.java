@@ -15,7 +15,7 @@ public class Cinema implements ADM {
 	
 	
 	//CONSTRUCTOR
-	private Cinema() {
+	public Cinema() {
 		super();
 	}
 	

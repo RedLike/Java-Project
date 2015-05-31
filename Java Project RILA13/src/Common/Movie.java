@@ -41,6 +41,10 @@ public class Movie implements ADM{
 		this.format = format;
 		this.producer = producer;
 	}
+	public Movie(int id, String name, int idMovieDB, String image, String description, String releaseDate, String producer, String genre, int duration, Format format) {
+		this (name, idMovieDB, image, description, releaseDate, producer, genre, duration, format);
+		this.id = id;
+	}
 
 	//CRUD
 	public boolean create() {
