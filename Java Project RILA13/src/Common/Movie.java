@@ -21,7 +21,7 @@ public class Movie implements ADM{
 	private Format format;
 	private String image;
 	
-	private Movie() {
+	public Movie() {
 		super();
 	}
 	
