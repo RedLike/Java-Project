@@ -20,6 +20,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -35,13 +36,20 @@ import javafx.stage.Stage;
 public class ManageController {
 
 	private Stage stage;
-	private static ArrayList<Cinema> cinemaList = new ArrayList();
-	private static ArrayList<Room> roomList = new ArrayList();
-	private static ArrayList<Format> formatList = new ArrayList();
-	private static ArrayList<Movie> movieList = new ArrayList();
-	private static ArrayList<FilmShow> filmShowList = new ArrayList();	
-	private static ArrayList<Booking> bookingList = new ArrayList();
-	private static ArrayList<Terminal> terminalList = new ArrayList();
+	private static ArrayList<Cinema> cinemaList = new ArrayList<Cinema>();
+	private static ArrayList<Cinema> cinemaListFilter = new ArrayList<Cinema>();
+	private static ArrayList<Room> roomList = new ArrayList<Room>();
+	private static ArrayList<Room> roomListFilter = new ArrayList<Room>();
+	private static ArrayList<Format> formatList = new ArrayList<Format>();
+	private static ArrayList<Format> formatListFilter = new ArrayList<Format>();
+	private static ArrayList<Movie> movieList = new ArrayList<Movie>();
+	private static ArrayList<Movie> movieListFilter = new ArrayList<Movie>();
+	private static ArrayList<FilmShow> filmShowList = new ArrayList<FilmShow>();	
+	private static ArrayList<FilmShow> filmShowListFilter = new ArrayList<FilmShow>();
+	private static ArrayList<Booking> bookingList = new ArrayList<Booking>();
+	private static ArrayList<Booking> bookingListFilter = new ArrayList<Booking>();
+	private static ArrayList<Terminal> terminalList = new ArrayList<Terminal>();
+	private static ArrayList<Terminal> terminalListFilter = new ArrayList<Terminal>();
 	
 	@FXML
 	private Button btnCinema;
@@ -59,13 +67,13 @@ public class ManageController {
 	@FXML
 	private ListView<String> listViewCinema;
 	@FXML
-	private TextField inCinemaId;
-	@FXML
 	private TextField inCinemaName;
 	@FXML
 	private TextField inCinemaCity;
 	@FXML
 	private TextArea inCinemaAddress;
+	@FXML
+	private TextField inCinemaId;
 	@FXML
 	private Button btnCinemaAdd;
 	@FXML
@@ -74,30 +82,58 @@ public class ManageController {
 	private Button btnCinemaDelete;
 	
 	@FXML
+	private Tab tabRoom;
+	@FXML
+	private ComboBox<String> comboRoomCinema;
+	@FXML
+	private ListView<Integer> listviewRoom;
+	@FXML
+	private TextField inRoomNumber;
+	@FXML
+	private TextField inRoomChair;
+	@FXML
+	private TextField inRoomId;
+	@FXML
+	private Button btnRoomAdd;
+	@FXML
+	private Button btnRoomModify;
+	@FXML
+	private Button btnRoomDelete;
+	
+	@FXML
+	private Tab tabTerminal;
+	@FXML
+	private ComboBox<String> comboTerminalCinema;
+	@FXML
+	private ListView<Integer> listviewTerminal;
+	@FXML
+	private TextField inTerminalNumber;
+	@FXML
+	private TextField inTerminalId;
+	@FXML
+	private Button btnTerminalAdd;
+	@FXML
+	private Button btnTerminalModify;
+	@FXML
+	private Button btnTerminalDelete;
+
+	
+	@FXML
 	private Group grpMovies;
 	
 	@FXML
 	private Group grpUsers;
 	
 	
-	
-	
-	
+/////////////////////////////////////////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	/**
 	 * Constructeur par défaut
 	 */
 	public ManageController() {
-		super();
-	
-//		this.cinemaList = new ArrayList();
-//		this.roomList = new ArrayList();
-//		this.formatList = new ArrayList();
-//		this.movieList = new ArrayList();
-//		this.filmShowList = new ArrayList();	
-//		this.bookingList = new ArrayList();
-//		this.terminalList = new ArrayList();
-		
+		super();		
 	}
 	
 	/**
@@ -121,6 +157,8 @@ public class ManageController {
 		}
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	/**
@@ -133,11 +171,33 @@ public class ManageController {
 		
 		grpUsers.setVisible(false);
 		
-		displayListViewCinema();
+		refreshListViewCinema();
 		grpCinema.setVisible(true);
 		tabPaneCinema.setVisible(true);
 		
 	}
+	
+	/**
+	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Cinema.
+	 */
+
+	private void refreshListViewCinema() {
+		listviewRoom.getItems().clear();
+		comboRoomCinema.getItems().clear();
+		listviewTerminal.getItems().clear();
+		comboTerminalCinema.getItems().clear();
+		listViewCinema.getItems().clear();
+				
+		for (Cinema cinema : ManageController.cinemaList) {
+			listViewCinema.getItems().add(cinema.getName());
+			
+			comboRoomCinema.getItems().add(cinema.getName());
+			comboTerminalCinema.getItems().add(cinema.getName());
+		}
+		
+		
+	}
+	
 	
 	/**
 	 * Méthode permettant d'afficher le menu de droite associé à la catégorie Movies.
@@ -154,30 +214,291 @@ public class ManageController {
 		grpMovies.setVisible(true);
 	}
 	
-
 	
 	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	// FUNCTION FOR CINEMA(Terminal TAB) PANEL (ADD, MODIFY, DELETE, DISPLAY)
 	/**
-	 * Méthode permettant de remplir la ListView de Cinema dans l'onglet "Cinema".
+	 * Méthode permettant de remplir la liste view en fonction des choix de la combobbox dans la partie Cinema=>Terminal.
 	 */
 	@FXML
-	private void displayListViewCinema() {
-		listViewCinema.getItems().clear();
-				
-		for (Cinema cinema : ManageController.cinemaList) {
-			listViewCinema.getItems().add(cinema.getName());
+	private void selectTerminalCinema() {
+		listviewTerminal.getItems().clear();
+		
+		btnTerminalModify.setDisable(true);
+		btnTerminalDelete.setDisable(true);
+		inTerminalNumber.setText("");
+		inTerminalId.setText("");
+		
+		int itemCinema = comboTerminalCinema.getSelectionModel().getSelectedIndex();
+		
+		if (itemCinema >= 0) {
+			Cinema cinema = ManageController.cinemaList.get(itemCinema);
+			
+			ManageController.terminalListFilter.clear();
+			
+			for (Terminal terminal : terminalList) {
+				if (terminal.getCinema().equals(cinema)) {
+					ManageController.terminalListFilter.add(terminal);
+					listviewTerminal.getItems().add(terminal.getNumber());
+
+				} else {
+					
+				}
+			}
+			
 		}
+		
+		
+		
+		
+	}
+	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Cinema=>Terminal.
+	 */
+	@FXML
+	private void selectTerminal() {	
+		int itemTerminal = listviewTerminal.getSelectionModel().getSelectedIndex();
+		
+		if (itemTerminal >= 0) {
+			Terminal terminal = ManageController.terminalListFilter.get(itemTerminal);
+			
+			inTerminalNumber.setText(""+terminal.getNumber());
+			inTerminalId.setText(""+terminal.getId());
+			
+			btnTerminalModify.setDisable(false);
+			btnTerminalDelete.setDisable(false);
+		}
+
+	}
+	
+	/**
+	 * Méthode permettant de créer une Room à un cinema (Cinema=>Terminal).
+	 */
+	@FXML
+	private void addTerminal() {
+		
+		int item = comboTerminalCinema.getSelectionModel().getSelectedIndex();
+		Cinema cinema = ManageController.cinemaList.get(item);
+
+		
+		Integer Number = Integer.parseInt(inTerminalNumber.getText());
+
+		
+		Terminal terminal = new Terminal(Number, cinema);
+		terminal.create();
+				
+		funcListTerminal();
+		selectTerminalCinema();
+				
+		
+	}
+	
+	/**
+	 * Méthode permettant de modifuer une Room d'un cinema (Cinema=>Terminal).
+	 */
+	@FXML
+	private void modifyTerminal() {
+		int item = comboTerminalCinema.getSelectionModel().getSelectedIndex();
+		Cinema cinema = ManageController.cinemaList.get(item);
+
+		Integer Number = Integer.parseInt(inTerminalNumber.getText());
+		String Id = inTerminalId.getText();
+		
+		for (Terminal terminal : ManageController.terminalListFilter) {;
+			if (Id.equals(""+terminal.getId())) {
+				terminal.setNumber(Number);
+				terminal.setCinema(cinema);
+				terminal.update();
+			}
+		}
+				
+		selectTerminalCinema();
+	}
+	
+	/**
+	 * Méthode permettant de supprimer un Terminal d'un cinema.
+	 */
+	@FXML
+	private void deleteTerminal() {
+		String id = inTerminalId.getText();
+		
+		for (Terminal terminal : ManageController.terminalList) {;
+			if (id.equals(""+terminal.getId())) {
+				if (terminal.delete()) {
+					System.out.println("delete OK");
+					btnTerminalModify.setDisable(true);
+					btnTerminalDelete.setDisable(true);
+				} else {
+					System.out.println("delete NOK");
+				}
+			}
+		}			
+		funcListTerminal();
+		selectTerminalCinema();
 	}
 	
 	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	// FUNCTION FOR CINEMA(ROOM TAB) PANEL (ADD, MODIFY, DELETE, DISPLAY)	
 	/**
-	 * Méthode permettant de remplir la ListView de Cinema dans l'onglet "Cinema".
-	 * @param e
+	 * Méthode permettant de remplir la liste view en fonction des choix de la combobbox dans la partie Cinema=>Room.
+	 */
+	@FXML
+	private void selectRoomCinema() {
+		listviewRoom.getItems().clear();
+		
+		btnRoomModify.setDisable(true);
+		btnRoomDelete.setDisable(true);
+		inRoomNumber.setText("");
+		inRoomChair.setText("");
+		inRoomId.setText("");
+		
+		int itemCinema = comboRoomCinema.getSelectionModel().getSelectedIndex();
+		
+		if (itemCinema >= 0) {
+			Cinema cinema = ManageController.cinemaList.get(itemCinema);
+			
+			ManageController.roomListFilter.clear();
+			
+			for (Room room : roomList) {
+				if (room.getCinema().equals(cinema)) {
+					ManageController.roomListFilter.add(room);
+					listviewRoom.getItems().add(room.getNumber());
+
+				} else {
+					
+				}
+			}
+			
+		}
+		
+		
+		
+		
+	}
+	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Cinema=>Room.
+	 */
+	@FXML
+	private void selectRoom() {	
+		int itemRoom = listviewRoom.getSelectionModel().getSelectedIndex();
+		
+		if (itemRoom >= 0) {
+			Room room = ManageController.roomListFilter.get(itemRoom);
+			
+			inRoomNumber.setText(""+room.getNumber());
+			inRoomChair.setText(""+room.getChair());
+			inRoomId.setText(""+room.getId());
+			
+			btnRoomModify.setDisable(false);
+			btnRoomDelete.setDisable(false);
+		}
+
+	}
+	
+	/**
+	 * Méthode permettant de créer une Room à un cinema (Cinema=>Room).
+	 */
+	@FXML
+	private void addRoom() {
+		
+		int item = comboRoomCinema.getSelectionModel().getSelectedIndex();
+		Cinema cinema = ManageController.cinemaList.get(item);
+
+		
+		Integer Number = Integer.parseInt(inRoomNumber.getText());
+		Integer Chair = Integer.parseInt(inRoomChair.getText());
+
+		
+		Room room = new Room(Number, Chair, cinema);
+		room.create();
+				
+		funcListRoom();
+		selectRoomCinema();
+				
+		
+	}
+	
+	/**
+	 * Méthode permettant de modifuer une Room d'un cinema (Cinema=>Room).
+	 */
+	@FXML
+	private void modifyRoom() {
+		int item = comboRoomCinema.getSelectionModel().getSelectedIndex();
+		Cinema cinema = ManageController.cinemaList.get(item);
+
+		Integer Number = Integer.parseInt(inRoomNumber.getText());
+		Integer Chair = Integer.parseInt(inRoomChair.getText());
+		String Id = inRoomId.getText();
+		
+		for (Room room : ManageController.roomListFilter) {;
+			if (Id.equals(""+room.getId())) {
+				System.out.println(Id+" =?="+room.getId());
+				System.out.println(Chair);
+				System.out.println(Number);
+				room.setChair(Chair);
+				room.setNumber(Number);
+				room.setCinema(cinema);
+				System.out.println("room chair : "+room.getChair());
+				System.out.println("room number : "+room.getNumber());
+				room.update();
+			}
+		}
+				
+		selectRoomCinema();
+	}
+	
+	/**
+	 * Méthode permettant de supprimer un Room d'un cinema.
+	 */
+	@FXML
+	private void deleteRoom() {
+		String id = inRoomId.getText();
+		
+		for (Room room : ManageController.roomList) {;
+			if (id.equals(""+room.getId())) {
+				if (room.delete()) {
+					System.out.println("delete OK");
+					btnRoomModify.setDisable(true);
+					btnRoomDelete.setDisable(true);
+				} else {
+					System.out.println("delete NOK");
+				}
+			}
+		}			
+		funcListRoom();
+		selectRoomCinema();
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	// FUNCTION FOR CINEMA(CINEMA TAB) PANEL (ADD, MODIFY, DELETE, DISPLAY)
+	/**
+	 * Méthode permettant d'ajouter un cinema.
 	 */
 	@FXML
 	private void addCinema() {
 		
-		System.out.println("test");
+//		System.out.println("test");
 		String name = inCinemaName.getText();
 		String city = inCinemaCity.getText();
 		String address = inCinemaAddress.getText();
@@ -185,8 +506,58 @@ public class ManageController {
 		Cinema cinema = new Cinema(city, name, address);
 		cinema.create();
 				
+		funcListCinema();
+		refreshListViewCinema();
+	}
+	
+	/**
+	 * Méthode permettant de modifier un cinema.
+	 */
+	@FXML
+	private void modifyCinema() {
 		
-		displayListViewCinema();
+		String name = inCinemaName.getText();
+		String city = inCinemaCity.getText();
+		String address = inCinemaAddress.getText();
+		String id = inCinemaId.getText();
+		
+		
+		for (Cinema cinema : ManageController.cinemaList) {;
+			if (id.equals(""+cinema.getId())) {
+				cinema.setName(name);
+				cinema.setCity(city);
+				cinema.setAddress(address);
+				cinema.update();
+			}
+		}
+				
+		refreshListViewCinema();
+	}
+	
+	/**
+	 * Méthode permettant de supprimer un cinema.
+	 */
+	@FXML
+	private void deleteCinema() {
+		String id = inCinemaId.getText();
+		
+		for (Cinema cinema : ManageController.cinemaList) {;
+			if (id.equals(""+cinema.getId())) {
+				if (cinema.delete()) {
+					System.out.println("delete OK");
+					btnCinemaModify.setDisable(true);
+					btnCinemaDelete.setDisable(true);
+				} else {
+					System.out.println("delete NOK");
+				}
+			}
+		}			
+		
+//		funcListCinema();
+		
+		initApp();
+		
+		refreshListViewCinema();
 	}
 	
 	/**
@@ -196,21 +567,27 @@ public class ManageController {
 	private void selectCinema() {
 		
 		int item = listViewCinema.getSelectionModel().getSelectedIndex();
-		Cinema cinema = ManageController.cinemaList.get(item);
-		
-		inCinemaName.setText(cinema.getName());
-		inCinemaCity.setText(cinema.getCity());
-		inCinemaId.setText(""+cinema.getId());
-		inCinemaAddress.setText(cinema.getAddress());
-		
-		btnCinemaModify.setDisable(false);
-		btnCinemaDelete.setDisable(false);
-		
-		
+		if (item >= 0) {
+			Cinema cinema = ManageController.cinemaList.get(item);
+			
+			inCinemaName.setText(cinema.getName());
+			inCinemaCity.setText(cinema.getCity());
+			inCinemaAddress.setText(cinema.getAddress());
+			inCinemaId.setText(""+cinema.getId());
+			
+			btnCinemaModify.setDisable(false);
+			btnCinemaDelete.setDisable(false);
+		}	
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	// INIT APP + FUNCTION GENERATE ARRAYLIST
 	/**
 	 * Initialize all objects lists needed by the application
 	 */
@@ -425,7 +802,8 @@ public class ManageController {
 		}
 	}
 	
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	

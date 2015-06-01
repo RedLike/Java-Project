@@ -42,7 +42,7 @@
                <children>
                   <Group fx:id="grpCinema" layoutX="141.0" layoutY="167.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TabPane fx:id="tabPaneCinema" prefHeight="570.0" prefWidth="612.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPaneCinema" prefHeight="570.0" prefWidth="612.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="150.0" visible="false">
                           <tabs>
                               <Tab fx:id="tabCinema" text="Cinema">
                                 <content>
@@ -55,22 +55,44 @@
                                           <Label layoutX="272.0" layoutY="184.0" prefHeight="17.0" prefWidth="70.0" text="Address :" />
                                           <TextArea fx:id="inCinemaAddress" layoutX="272.0" layoutY="209.0" prefHeight="71.0" prefWidth="272.0" />
                                           <TextField fx:id="inCinemaCity" layoutX="333.0" layoutY="94.0" prefHeight="25.0" prefWidth="194.0" />
-                                          <TextField fx:id="inCinemaId" layoutX="333.0" layoutY="136.0" prefHeight="25.0" prefWidth="194.0" />
-                                          <Button fx:id="btnCinemaAdd" layoutX="269.0" layoutY="335.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="25.0" prefWidth="67.0" text="Add" />
-                                          <Button fx:id="btnCinemaModify" disable="true" layoutX="363.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Modify" />
-                                          <Button fx:id="btnCinemaDelete" disable="true" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Delete" />
+                                          <Button fx:id="btnCinemaAdd" layoutX="269.0" layoutY="335.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="25.0" prefWidth="80.0" text="Add" />
+                                          <Button fx:id="btnCinemaModify" disable="true" layoutX="363.0" layoutY="335.0" mnemonicParsing="false" onAction="#modifyCinema" prefHeight="25.0" prefWidth="80.0" text="Modify" />
+                                          <Button fx:id="btnCinemaDelete" disable="true" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" onAction="#deleteCinema" prefHeight="25.0" prefWidth="80.0" text="Delete" />
+                                          <TextField fx:id="inCinemaId" layoutX="333.0" layoutY="137.0" prefHeight="25.0" prefWidth="194.0" visible="false" />
                                        </children>
                                     </AnchorPane>
                                 </content>
                               </Tab>
                             <Tab fx:id="tabRoom" text="Room">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="32.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="32.0">
+                                       <children>
+                                          <ComboBox fx:id="comboRoomCinema" layoutX="14.0" layoutY="26.0" onAction="#selectRoomCinema" prefHeight="25.0" prefWidth="200.0" />
+                                          <ListView fx:id="listviewRoom" layoutX="14.0" layoutY="72.0" onMouseClicked="#selectRoom" prefHeight="455.0" prefWidth="200.0" />
+                                          <Label layoutX="269.0" layoutY="119.0" text="Number :" />
+                                          <Label layoutX="271.0" layoutY="174.0" text="Chair :" />
+                                          <TextField fx:id="inRoomNumber" layoutX="346.0" layoutY="115.0" />
+                                          <TextField fx:id="inRoomId" layoutX="346.0" layoutY="238.0" visible="false" />
+                                          <TextField fx:id="inRoomChair" layoutX="346.0" layoutY="170.0" />
+                                          <Button fx:id="btnRoomAdd" layoutX="269.0" layoutY="335.0" mnemonicParsing="false" onAction="#addRoom" prefHeight="25.0" prefWidth="80.0" text="Add" />
+                                          <Button fx:id="btnRoomModify" disable="true" layoutX="363.0" layoutY="335.0" mnemonicParsing="false" onAction="#modifyRoom" prefHeight="25.0" prefWidth="80.0" text="Modify" />
+                                          <Button fx:id="btnRoomDelete" disable="true" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" onAction="#deleteRoom" prefHeight="25.0" prefWidth="80.0" text="Delete" />
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
                             <Tab fx:id="tabTerminal" text="Terminal">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="618.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="618.0">
+                                       <children>
+                                          <ComboBox fx:id="comboTerminalCinema" layoutX="14.0" layoutY="26.0" onAction="#selectTerminalCinema" prefHeight="25.0" prefWidth="200.0" />
+                                          <ListView fx:id="listviewTerminal" layoutX="14.0" layoutY="72.0" onMouseClicked="#selectTerminal" prefHeight="455.0" prefWidth="200.0" />
+                                          <Button fx:id="btnTerminalDelete" disable="true" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" onAction="#deleteTerminal" prefHeight="25.0" prefWidth="80.0" text="Delete" />
+                                          <Button fx:id="btnTerminalModify" disable="true" layoutX="363.0" layoutY="335.0" mnemonicParsing="false" onAction="#modifyTerminal" prefHeight="25.0" prefWidth="80.0" text="Modify" />
+                                          <Button fx:id="btnTerminalAdd" layoutX="269.0" layoutY="335.0" mnemonicParsing="false" onAction="#addTerminal" prefHeight="25.0" prefWidth="80.0" text="Add" />
+                                          <TextField fx:id="inTerminalId" layoutX="346.0" layoutY="186.0" visible="false" />
+                                          <TextField fx:id="inTerminalNumber" layoutX="346.0" layoutY="115.0" />
+                                          <Label layoutX="269.0" layoutY="119.0" text="Number :" />
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
                           </tabs>
