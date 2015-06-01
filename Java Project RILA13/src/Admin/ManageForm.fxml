@@ -99,7 +99,33 @@
                         </TabPane>
                      </children>
                   </Group>
-                  <Group fx:id="grpMovies" layoutX="125.0" layoutY="205.0" visible="false" />
+                  <Group fx:id="grpMovies">
+                     <children>
+                        <TabPane fx:id="tabPaneMovie" prefHeight="570.0" prefWidth="612.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="135.0">
+                          <tabs>
+                            <Tab text="Movies">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="391.0" prefWidth="367.0" />
+                              </content>
+                            </Tab>
+                            <Tab text="Filmshow">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              </content>
+                            </Tab>
+                              <Tab text="Format">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                              <Tab text="Booking">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children></Group>
                   <Group fx:id="grpUsers" layoutX="239.0" layoutY="230.0" visible="false" />
                   <Group layoutX="211.0" layoutY="194.0" visible="false" />
                </children>

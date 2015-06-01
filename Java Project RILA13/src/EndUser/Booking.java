@@ -2,6 +2,7 @@ package EndUser;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.Date;
 
 import API.ConnectDB;
@@ -11,7 +12,7 @@ import Interface.ADM;
 public class Booking implements ADM{
 
 	private Integer id;
-	private Date hour;
+	private Time hour;
 	private Date date;
 	private FilmShow filmshow;
 	
@@ -30,7 +31,7 @@ public class Booking implements ADM{
 	 * @param date
 	 * @param filmshow
 	 */
-	public Booking(Date hour, Date date, FilmShow filmshow) {
+	public Booking(Time hour, Date date, FilmShow filmshow) {
 		this();
 		this.hour = hour;
 		this.date = date;
@@ -44,7 +45,7 @@ public class Booking implements ADM{
 	 * @param date
 	 * @param filmshow
 	 */
-	public Booking(Integer id, Date hour, Date date, FilmShow filmshow) {
+	public Booking(Integer id, Time hour, Date date, FilmShow filmshow) {
 		this(hour, date, filmshow);
 		this.id = id;
 	}
@@ -60,9 +61,8 @@ public class Booking implements ADM{
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Hour, Date, Id_FilmShow, Id_Terminal FROM Booking "
-							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"'"
-							+ "AND Id_FilmShow='"+this.filmshow.getId()+"'";
+			String sqlRead0 = "SELECT Id, Hour, Date, Id_FilmShow FROM Booking "
+							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"'";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
@@ -78,7 +78,7 @@ public class Booking implements ADM{
 				setId(result1.getInt(1));
 				res = true;				
 			} else {
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("Booking already exist");
 				res = false;
 			}			
@@ -156,18 +156,18 @@ public class Booking implements ADM{
 	}
 
 	/**
-	 *  Get Date value of the hour attribute
+	 *  Get Time value of the hour attribute
 	 * @return hour
 	 */
-	public Date getHour() {
+	public Time getHour() {
 		return hour;
 	}
 
 	/**
-	 * Set Date value of the hour attribute
+	 * Set Time value of the hour attribute
 	 * @param hour
 	 */
-	public void setHour(Date hour) {
+	public void setHour(Time hour) {
 		this.hour = hour;
 	}
 

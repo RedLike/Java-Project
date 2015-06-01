@@ -3,11 +3,9 @@ package Common;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-
 
 import API.ConnectDB;
 import EndUser.Booking;
@@ -17,7 +15,7 @@ import Interface.ADM;
 public class FilmShow implements ADM {
 
 	private Integer id;
-	private Date hour;
+	private Time hour;
 	private Date date;
 	private boolean visibility;
 	private Movie movie;
@@ -40,7 +38,7 @@ public class FilmShow implements ADM {
 	 * @param movie
 	 * @param room
 	 */
-	public FilmShow(Date hour, Date date, boolean visibility, Movie movie,
+	public FilmShow(Time hour, Date date, boolean visibility, Movie movie,
 			Room room) {
 		this();
 		this.hour = hour;
@@ -59,7 +57,7 @@ public class FilmShow implements ADM {
 	 * @param movie
 	 * @param room
 	 */
-	public FilmShow(Integer id, Date hour, Date date, boolean visibility,
+	public FilmShow(Integer id, Time hour, Date date, boolean visibility,
 			Movie movie, Room room) {
 		this(hour, date, visibility, movie, room);
 		this.id = id;
@@ -83,7 +81,7 @@ public class FilmShow implements ADM {
 	   
 	   while(res.next())
 	   {    
-	    alListBooking.add(new Booking(res.getInt(1), res.getDate(2), res.getDate(3), this));
+	    alListBooking.add(new Booking(res.getInt(1), res.getTime(2), res.getDate(3), this));
 	   }
 	   
 	  } catch (SQLException e) {
@@ -233,18 +231,18 @@ public class FilmShow implements ADM {
 	}
 
 	/**
-	 *  Get Date value of the hour attribute
+	 *  Get Time value of the hour attribute
 	 * @return hour
 	 */
-	public Date getHour() {
+	public Time getHour() {
 		return this.hour;
 	}
 
 	/**
-	 * Set Date value of the hour attribute
+	 * Set Time value of the hour attribute
 	 * @param hour
 	 */
-	public void setHour(Date hour) {
+	public void setHour(Time hour) {
 		this.hour = hour;
 	}
 

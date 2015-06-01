@@ -141,7 +141,7 @@ public class Movie implements ADM{
 				setId(result1.getInt(1));
 				res = true;				
 			} else {
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("Movie already exist");
 				res = false;
 			}			

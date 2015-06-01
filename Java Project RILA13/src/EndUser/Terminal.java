@@ -29,41 +29,10 @@ public class Terminal implements ADM {
 		this(number, cinema);
 		this.id = id;
 	}
-
-	
-	
-	//GETTERS & SETTERS
-	public Integer getId() {
-		return id;
-	}
-
-	private void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-
-	public Cinema getCinema() {
-		return cinema;
-	}
-
-	public void setCinema(Cinema cinema) {
-		this.cinema = cinema;
-	}
-	
-	
 	
 	//CRUD
 	@Override
 	public boolean create() {
-		// TODO Auto-generated method stub
-		
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
@@ -82,29 +51,23 @@ public class Terminal implements ADM {
 				
 				result1.next();
 				setId(result1.getInt(1));
-				res = true;
-				
+				res = true;				
 			} else {
-//				result0.next();
-				setId(result0.getInt(1));
+				setId(result0.getInt("Id"));
 				System.out.println("Terminal already exist");
 				res = false;
-			}
-			
+			}			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 
 
 	@Override
 	public boolean update() {
-		// TODO Auto-generated method stub
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
@@ -116,42 +79,78 @@ public class Terminal implements ADM {
 				res = true;
 			} else {
 				res = false;
-			}
-			
-			
+			}			
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 	
 
 	@Override
 	public boolean delete() {
-		// TODO Auto-generated method stub
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
 		try {
 			String sqlDelete0 = "DELETE FROM UserAdmin WHERE Id='"+this.id+"'";
-//			db.WriteDB(sqlDelete0);
 			if (db.WriteDB(sqlDelete0) != null) {
 				res = true;
 			} else {
 				res = false;
-			}
-			
+			}			
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 	
-	
-	
-	
-	
-	
+	//GETTERS & SETTERS
+	/**
+	 * Get Integer value of the id attribute
+	 * @return id
+	 */
+	public Integer getId() {
+		return this.id;
+	}
+
+	/**
+	 * Set Integer value of the id attribute
+	 * @param id
+	 */
+	private void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * Get Integer value of the number attribute
+	 * @return number
+	 */
+	public Integer getNumber() {
+		return this.number;
+	}
+
+	/**
+	 * Set Integer value of the number attribute
+	 * @param number
+	 */
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	/**
+	 * Get Cinema object of the cinema attribute
+	 * @return cinema
+	 */
+	public Cinema getCinema() {
+		return this.cinema;
+	}
+
+	/**
+	 * Set Cinema object of the cinema attribute
+	 * @param cinema
+	 */
+	public void setCinema(Cinema cinema) {
+		this.cinema = cinema;
+	}
 }

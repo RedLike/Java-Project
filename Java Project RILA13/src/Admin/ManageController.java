@@ -763,7 +763,7 @@ public class ManageController {
 						movie = movieElement;
 					}				
 				}
-				ManageController.filmShowList.add(new FilmShow(res.getInt("Id"), res.getDate("Hour"), res.getDate("Date"), res.getBoolean("Visibility"), movie, room));
+				ManageController.filmShowList.add(new FilmShow(res.getInt("Id"), res.getTime("Hour"), res.getDate("Date"), res.getBoolean("Visibility"), movie, room));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -793,7 +793,7 @@ public class ManageController {
 						filmshow=filmShowElement;
 					}
 				}
-				ManageController.bookingList.add(new Booking(res.getInt("Id"), res.getDate("Hour"), res.getDate("Date"), filmshow));
+				ManageController.bookingList.add(new Booking(res.getInt("Id"), res.getTime("Hour"), res.getDate("Date"), filmshow));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
