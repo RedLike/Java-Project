@@ -113,7 +113,7 @@ public class TheMovieDB {
 					
 				if(!jsonObject.isNull("overview")) {
 					overview = jsonObject.getString("overview");
-					overview = overview.replace("'", "GRRDR");
+					overview = overview.replace("'", "''");
 				}	
 					
 				Movie movie = new Movie(original_title, idMovieDB, poster_path, overview, release_date);
@@ -170,7 +170,7 @@ public class TheMovieDB {
 					format = format.substring(9,format.indexOf("\",\"",9));
 					
 					for(Format x : listFormat) {
-						if (x.getLabel().equals(format.toString()) ) {
+						if (x.getLanguage().equals(format.toString()) ) {
 							movieFromSearch.setFormat(x);
 						}
 					}
