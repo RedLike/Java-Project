@@ -108,7 +108,7 @@ public class TheMovieDB {
 				}
 					
 				if(!jsonObject.isNull("poster_path")) {
-					poster_path = jsonObject.getString("poster_path");
+					poster_path = "https://image.tmdb.org/t/p/w185"+jsonObject.getString("poster_path");
 				}
 					
 				if(!jsonObject.isNull("overview")) {
@@ -192,6 +192,18 @@ public class TheMovieDB {
 	 */
 	public void Insert(List<Movie> listMovie) {
 		for(Movie movie : listMovie) {
+//			System.out.println("======================");
+//			System.out.println(movie.getId());
+//			System.out.println(movie.getIdMovieDB());
+//			System.out.println(movie.getName());
+//			System.out.println(movie.getDescription());
+//			System.out.println(movie.getDuration());
+//			System.out.println(movie.getGenre());
+//			System.out.println(movie.getImage());
+//			System.out.println(movie.getProducer());
+//			System.out.println(movie.getReleaseDate());
+//			System.out.println(movie.getFormat().getLabel());
+//			System.out.println("======================");
 			movie.create();
 		}
 	}
