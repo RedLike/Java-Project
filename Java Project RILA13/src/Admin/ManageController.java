@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
 
 import API.ConnectDB;
+import API.TheMovieDB;
 import Common.Cinema;
 import Common.FilmShow;
 import Common.Format;
@@ -26,6 +30,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 
@@ -120,6 +126,31 @@ public class ManageController {
 	
 	@FXML
 	private Group grpMovies;
+	@FXML
+	private TabPane tabPaneMovie;
+	@FXML
+	private Tab tabMovie;
+	@FXML
+	private ListView<String> listviewMovie;
+	@FXML
+	private TextField inMovieName;
+	@FXML
+	private TextField inMovieDuration;
+	@FXML
+	private TextArea inMovieDescription;
+	@FXML
+	private TextField inMovieFormat;
+	@FXML
+	private TextField inMovieGenre;
+	@FXML
+	private TextField inMovieProducer;
+	@FXML
+	private TextField inMovieReleasedate;
+	@FXML
+	private ImageView inMovieImage;
+	@FXML
+	private Button btnTheMovieDBUpdate;
+
 	
 	@FXML
 	private Group grpUsers;
@@ -168,6 +199,7 @@ public class ManageController {
 	@FXML
 	private void displayTabCinemaAll(ActionEvent e) {
 		grpMovies.setVisible(false);
+		tabPaneMovie.setVisible(false);
 		
 		grpUsers.setVisible(false);
 		
@@ -210,11 +242,92 @@ public class ManageController {
 		
 		grpUsers.setVisible(false);
 		
-		
+		refreshListViewMovie();
 		grpMovies.setVisible(true);
+		tabPaneMovie.setVisible(true);
+	}
+	
+	/**
+	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Movie.
+	 */
+	@FXML
+	private void refreshListViewMovie() {
+		listviewMovie.getItems().clear();
+
+				
+		for (Movie movie : ManageController.movieList) {
+			listviewMovie.getItems().add(movie.getName());
+			
+			
+		}
+		
+		
 	}
 	
 	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	//FUNCTION FOR MOVIES(Movie TAB) PANEL (Display, Update DB)	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Movie=>Movie.
+	 */
+	@FXML
+	private void selectMovie() {	
+		int itemMovie = listviewMovie.getSelectionModel().getSelectedIndex();
+		if (itemMovie >= 0) {
+			Movie movie = ManageController.movieList.get(itemMovie);
+			
+			inMovieName.setText(movie.getName());
+			
+			int hours = movie.getDuration() / 60;
+			int minutes =movie.getDuration() % 60;
+			inMovieDuration.setText(hours+"h"+String.format("%02d",minutes)+"min");
+			
+			inMovieFormat.setText(movie.getFormat().getLabel());
+			inMovieGenre.setText(movie.getGenre());
+			inMovieProducer.setText(movie.getProducer());
+			inMovieReleasedate.setText(movie.getReleaseDate());
+			inMovieDescription.setText(movie.getDescription());
+			
+			Image imageMovie = new Image(movie.getImage());
+			inMovieImage.setImage(imageMovie);
+			
+			btnCinemaModify.setDisable(false);
+			btnCinemaDelete.setDisable(false);
+		}
+	}
+	
+	
+	/**
+	 * Méthode permettant de lancer la fonction permettant de récupéré des film depuis Th Movie DB.
+	 */
+	@FXML
+	private void StartTheMovieDB() {	
+		TheMovieDB info;
+		List<Movie> movies;
+		try {
+			info = new TheMovieDB();
+			if (!ManageController.formatList.isEmpty()) {
+				movies = info.Discover(ManageController.formatList);
+				if (!movies.isEmpty()) {
+					info.Insert(movies);
+				}
+			}
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		initApp();
+		refreshListViewMovie();
+		
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -249,11 +362,7 @@ public class ManageController {
 				}
 			}
 			
-		}
-		
-		
-		
-		
+		}	
 	}
 	
 	/**
@@ -272,7 +381,6 @@ public class ManageController {
 			btnTerminalModify.setDisable(false);
 			btnTerminalDelete.setDisable(false);
 		}
-
 	}
 	
 	/**
