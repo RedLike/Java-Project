@@ -48,7 +48,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ListView fx:id="listViewCinema" layoutX="14.0" layoutY="20.0" prefHeight="503.0" prefWidth="200.0" />
+                                          <ListView fx:id="listViewCinema" layoutX="14.0" layoutY="20.0" onMouseClicked="#selectCinema" prefHeight="503.0" prefWidth="200.0" />
                                           <Label layoutX="272.0" layoutY="98.0" prefHeight="17.0" prefWidth="46.0" text="City :" />
                                           <TextField fx:id="inCinemaName" layoutX="333.0" layoutY="42.0" prefHeight="25.0" prefWidth="194.0" />
                                           <Label layoutX="272.0" layoutY="46.0" prefHeight="17.0" prefWidth="46.0" text="Name :" />
