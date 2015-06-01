@@ -1,11 +1,14 @@
 package application;
 
-import Admin.LoginForm;
+
+
+import Admin.LoginController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class MainAdmin extends Application {
 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -16,9 +19,12 @@ public class MainAdmin extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// juste montrer l'enchaînement des fenêtre, j'ai rajouté une fenêtre de login
-		LoginForm loginForm = new LoginForm();
-		loginForm.loadScreen(primaryStage);
+		
+		@SuppressWarnings("unused")
+		LoginController loginForm = new LoginController(primaryStage);
+		
 	}
+	
+	
 
 }
