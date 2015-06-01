@@ -15,7 +15,6 @@ public class Movie implements ADM{
 	private int duration;
 	private String description;
 	private String genre;
-	private String author;
 	private String producer;
 	private String releaseDate;
 	private Format format;
@@ -342,21 +341,6 @@ public class Movie implements ADM{
 		this.genre = genre;
 	}
 
-	/**
-	 * Get String value of the author attribute
-	 * @return author
-	 */
-	public String getAuthor() {
-		return this.author;
-	}
-
-	/**
-	 * Set String value of the author attribute
-	 * @param author
-	 */
-	public void setAuthor(String author) {
-		this.author = author;
-	}
 
 	/**
 	 * Get String value of the producer attribute
