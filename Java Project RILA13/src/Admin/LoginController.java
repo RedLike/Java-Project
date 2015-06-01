@@ -1,8 +1,13 @@
 package Admin;
 
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -14,6 +19,9 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
+	
+	private Stage stage;
+	
 	// L'annotation @FXML permet de faire le lien avec des éléments IHM du fichier FXML.
 	@FXML
 	private TextField loginInput;
@@ -32,6 +40,25 @@ public class LoginController {
 		super();
 	}
 	
+	/**
+	 * Constructeur par defaut, permet d'afficher la fenêtre d'authentification.
+	 * @param stage
+	 */
+	public LoginController(Stage stage) {
+		this();
+		try {
+			this.stage = stage;
+			this.stage.setTitle("Authentification");
+			Parent root = FXMLLoader.load(LoginController.class.getResource("LoginForm.fxml"));
+			this.stage.setScene(new Scene(root));
+			this.stage.show();		
+						
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * Méthode appelée sur le click du bouton "Connexion" du formulaire d'authentification.
@@ -45,7 +72,7 @@ public class LoginController {
 		stage.close();
 		
 		@SuppressWarnings("unused")
-		ManageForm manageForm = new ManageForm(stage);
+		ManageController manageForm = new ManageController(stage);
 		
 //		if(!loginInput.getText().isEmpty() && !passwordInput.getText().isEmpty()) {
 //			
@@ -74,6 +101,17 @@ public class LoginController {
 	}
 	
 
+	
+	//GETTERS & SETTERS
+	@SuppressWarnings("unused")
+	private Stage getStage() {
+		return stage;
+	}
+
+	@SuppressWarnings("unused")
+	private void setStage(Stage stage) {
+		this.stage = stage;
+	}
 
 		
 }
