@@ -8,17 +8,26 @@ import Interface.ADM;
 
 public class Cinema implements ADM {
 
+
 	private Integer id;
 	private String city;
 	private String name;
 	private String address;
 	
-	
-	//CONSTRUCTOR
+	//CONSTRUCTORS
+	/**
+	 * Empty Cinema constructor 
+	 */
 	public Cinema() {
 		super();
 	}
 	
+	/**
+	 * Cinema constructor with parameters
+	 * @param city
+	 * @param name
+	 * @param address
+	 */
 	public Cinema(String city, String name, String address) {
 		this();
 		this.id = null;
@@ -26,56 +35,31 @@ public class Cinema implements ADM {
 		this.name = name;
 		this.address = address;
 	}
-	
+
+	/**
+	 * Cinema constructor with parameters and its db id
+	 * @param id
+	 * @param city
+	 * @param name
+	 * @param address
+	 */
 	public Cinema(int id, String city, String name, String address) {
 		this(city, name, address);
 		this.id = id;
 	}
-
-
 	
-	//GETTERS & SETTERS
-	public String getCity() {
-		return city;
-	}
 	
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-
-	public int getId() {
-		return id;
-	}
 	
-	private void setId(Integer Id) {
-		this.id = Id;
-	}
-
+	
+	
 	
 	//CRUD
+	/* (non-Javadoc)
+	 * @see Interface.ADM#create()
+	 */
 	@Override
-	public boolean create() {
-		// TODO Auto-generated method stub
-		
+	public boolean create() 
+	{
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
@@ -93,30 +77,29 @@ public class Cinema implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt("Id"));
+				setId(result1.getInt(1));
 				res = true;
 				
 			} else {
-//				result0.next();
 				setId(result0.getInt("Id"));
 				System.out.println("Cinéma already exist");
 				res = false;
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 
-
+	/* (non-Javadoc)
+	 * @see Interface.ADM#update()
+	 */
 	@Override
-	public boolean update() {
-		// TODO Auto-generated method stub
+	public boolean update() 
+	{
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
@@ -128,26 +111,26 @@ public class Cinema implements ADM {
 				res = true;
 			} else {
 				res = false;
-			}
-			
+			}			
 			
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 	
-
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#delete()
+	 */
 	@Override
-	public boolean delete() {
-		// TODO Auto-generated method stub
+	public boolean delete() 
+	{
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
 		try {
 			String sqlDelete0 = "DELETE FROM Cinema WHERE Id='"+this.id+"'";
-//			db.WriteDB(sqlDelete0);
 			if (db.WriteDB(sqlDelete0) != null) {
 				res = true;
 			} else {
@@ -161,8 +144,69 @@ public class Cinema implements ADM {
 		return res;
 	}
 
+	//GETTERS & SETTERS
 	
-		
+	/** 
+	 * Get integer value of the id attribute
+	 * @return id
+	 */
+	public int getId() {
+		return this.id;
+	}
 	
+	/** 
+	 * Set id attribute value
+	 * @param Id
+	 */
+	private void setId(Integer Id) {
+		this.id = Id;
+	}	
 	
+	/** 
+	 * Get String value of the city attribute
+	 * @return city
+	 */
+	public String getCity() {
+		return this.city;
+	}
+	
+	/** 
+	 * Set city attribute value
+	 * @param city
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/** 
+	 *  Get String value of the name attribute
+	 * @return name
+	 */
+	public String getName() {
+		return this.name;
+	}
+
+	/** 
+	 * Set name attribute value
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/** 
+	 * Get String value of the address attribute
+	 * @return address
+	 */
+	public String getAddress() {
+		return this.address;
+	}
+
+	/** 
+	 * Set address attribute value
+	 * @param address
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
 }

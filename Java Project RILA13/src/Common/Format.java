@@ -13,10 +13,19 @@ public class Format implements ADM{
 	private String language;
 	private String description;
 	
+	/**
+	 * Empty Format constructor 
+	 */
 	public Format() {
 		super();
 	}
 	
+	/**
+	 * Format constructor with parameters
+	 * @param label
+	 * @param language
+	 * @param description
+	 */
 	public Format(String label, String language, String description) {
 		this();
 		this.label = label;
@@ -24,12 +33,23 @@ public class Format implements ADM{
 		this.description = description;
 	}
 	
+	/**
+	 * Format constructor with parameters and its db id
+	 * @param id
+	 * @param label
+	 * @param language
+	 * @param description
+	 */
 	public Format(int id, String label, String language, String description) {
 		this(label, language, description);
 		this.id = id;
 	}
 	
 	//CRUD
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#create()
+	 */
 	public boolean create() {
 		
 		boolean res = false;
@@ -49,11 +69,10 @@ public class Format implements ADM{
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt("Id"));
+				setId(result1.getInt(1));
 				res = true;
 				
 			} else {
-//				result0.next();
 				setId(result0.getInt("Id"));
 				System.out.println("Format already exist");
 				res = false;
@@ -68,6 +87,10 @@ public class Format implements ADM{
 		return res;
 	}
 	
+	/**
+	 * Return a boolean that is false if the Format don't exist in the database or if the request doesn't succeed
+	 * @return res
+	 */
 	public boolean read(){
 		
 		boolean res = false;
@@ -79,11 +102,12 @@ public class Format implements ADM{
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
-				System.out.println("Format already exist");
+				System.out.println("Format don't exist");
 			}
 			else
 			{
 				System.out.println(result0.getString(0));
+				res = true;
 			}
 			
 		} catch (SQLException e) {
@@ -95,6 +119,10 @@ public class Format implements ADM{
 		return res;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#update()
+	 */
 	public boolean update(){
 		
 		boolean res = false;
@@ -108,16 +136,17 @@ public class Format implements ADM{
 				res = true;
 			} else {
 				res = false;
-			}
-			
-			
+			}			
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#delete()
+	 */
 	public boolean delete(){
 		
 		boolean res = false;
@@ -125,7 +154,6 @@ public class Format implements ADM{
 		
 		try {
 			String sqlDelete0 = "DELETE FROM Format WHERE Id='"+this.id+"'";
-//			db.WriteDB(sqlDelete0);
 			if (db.WriteDB(sqlDelete0) != null) {
 				res = true;
 			} else {
@@ -141,34 +169,66 @@ public class Format implements ADM{
 
 	//GETTERS & SETTERS
 	
+	/**
+	 * Get Integer value of the id attribute
+	 * @return id
+	 */
 	public int getId() {
 		return this.id;
 	}
 
+	/**
+	 * Set Integer value of the id attribute
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	
+	/**
+	 * Get String value of the label attribute
+	 * @return label
+	 */
 	public String getLabel() {
-		return label;
+		return this.label;
 	}
 
+	/**
+	 * Set String value of the label attribute
+	 * @param label
+	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
+	/**
+	 * Get String value of the language attribute
+	 * @return language
+	 */
 	public String getLanguage() {
-		return language;
+		return this.language;
 	}
 
+	/**
+	 * Set String value of the language attribute
+	 * @param language
+	 */
 	public void setLanguage(String language) {
 		this.language = language;
 	}
 
+	/**
+	 * Get String value of the description attribute
+	 * @return description
+	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
+	/**
+	 * Set String value of the description attribute
+	 * @param description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}

@@ -21,15 +21,25 @@ public class FilmShow implements ADM {
 	private Date date;
 	private boolean visibility;
 	private Movie movie;
-	private Room room;
-	
+	private Room room;	
 	
 	//CONSTRUCTORS
+	
+	/**
+	 * Empty FilmShow constructor 
+	 */
 	public FilmShow() {
 		super();
 	}
 
-
+	/**
+	 * FilmShow constructor with parameters
+	 * @param hour
+	 * @param date
+	 * @param visibility
+	 * @param movie
+	 * @param room
+	 */
 	public FilmShow(Date hour, Date date, boolean visibility, Movie movie,
 			Room room) {
 		this();
@@ -40,18 +50,26 @@ public class FilmShow implements ADM {
 		this.room = room;
 	}
 
-
+	/**
+	 * FilmShow constructor with parameters and its db id
+	 * @param id
+	 * @param hour
+	 * @param date
+	 * @param visibility
+	 * @param movie
+	 * @param room
+	 */
 	public FilmShow(Integer id, Date hour, Date date, boolean visibility,
 			Movie movie, Room room) {
 		this(hour, date, visibility, movie, room);
 		this.id = id;
-	}
-
+	}	
 	
-	
-	
-	// FUNCTION
-	
+	// FUNCTIONS
+	/**
+	 * Return an ArrayList of all the Booking objects associate to the active object FilmShow
+	 * @return alListBooking
+	 */
 	public ArrayList<Booking> listBooking()
 	 {
 	  
@@ -77,7 +95,11 @@ public class FilmShow implements ADM {
 	  return alListBooking;
 	  
 	 }
-	 
+	
+	/**
+	 * Delete in the database all the Booking objects associate to the active object FilmShow
+	 * @param bookingList
+	 */
 	 public void deleteBooking(ArrayList<Booking> bookingList)
 	 {
 	  for (Booking booking : bookingList) {
@@ -88,84 +110,23 @@ public class FilmShow implements ADM {
 	  }
 	 }
 	 
-	 public int placeLeft()
+	 /**
+	  * Return the number of places remaining in a room for the active object FilmShow
+	  * @return placesLeft
+	  */
+	 public int placesLeft()
 	 {
-	  return this.getRoom().getChair()-this.listBooking().size();
-	 }
-		
-		
-
-	
-	
-	
-	//GETTERS & SETTERS
-	public Integer getId() {
-		return id;
-	}
-
-
-	private void setId(Integer id) {
-		this.id = id;
-	}
-
-
-	public Date getHour() {
-		return hour;
-	}
-
-
-	public void setHour(Date hour) {
-		this.hour = hour;
-	}
-
-
-	public Date getDate() {
-		return date;
-	}
-
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-
-	public boolean isVisibility() {
-		return visibility;
-	}
-
-
-	public void setVisibility(boolean visibility) {
-		this.visibility = visibility;
-	}
-
-
-	public Movie getMovie() {
-		return movie;
-	}
-
-
-	public void setMovie(Movie movie) {
-		this.movie = movie;
-	}
-
-
-	public Room getRoom() {
-		return room;
-	}
-
-
-	public void setRoom(Room room) {
-		this.room = room;
-	}
-
-
-
-	
+		 int placesLeft=this.getRoom().getChair()-this.listBooking().size();
+		 return placesLeft;
+	 }	
 	
 	//CRUD
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#create()
+	 */
 	@Override
 	public boolean create() {
-		// TODO Auto-generated method stub
 		
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
@@ -187,30 +148,29 @@ public class FilmShow implements ADM {
 				ResultSet result1 = db.ReadDB(sqlRead1);
 				
 				result1.next();
-				setId(result1.getInt("Id"));
+				setId(result1.getInt(1));
 				res = true;
 				
 			} else {
-//				result0.next();
 				setId(result0.getInt("Id"));
 				System.out.println("FilmShow already exist");
 				res = false;
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#update()
+	 */
 	@Override
 	public boolean update() {
-		// TODO Auto-generated method stub
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
@@ -223,26 +183,24 @@ public class FilmShow implements ADM {
 				res = true;
 			} else {
 				res = false;
-			}
-			
-			
+			}			
 		} finally {
 			db.CloseDB();
-		}
-		
+		}		
 		return res;
 	}
 	
-
+	/*
+	 * (non-Javadoc)
+	 * @see Interface.ADM#delete()
+	 */
 	@Override
 	public boolean delete() {
-		// TODO Auto-generated method stub
 		boolean res = false;
 		ConnectDB db = new ConnectDB();
 		
 		try {
 			String sqlDelete0 = "DELETE FROM FilmShow WHERE Id='"+this.id+"'";
-//			db.WriteDB(sqlDelete0);
 			if (db.WriteDB(sqlDelete0) != null) {
 				res = true;
 			} else {
@@ -256,6 +214,101 @@ public class FilmShow implements ADM {
 		return res;
 	}
 	
-	
-	
+	//GETTERS & SETTERS
+	 
+	/**
+	 *  Get Integer value of the id attribute
+	 * @return id
+	 */
+	public Integer getId() {
+		return this.id;
+	}
+
+	/**
+	 * Set Integer value of the id attribute
+	 * @param id
+	 */
+	private void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 *  Get Date value of the hour attribute
+	 * @return hour
+	 */
+	public Date getHour() {
+		return this.hour;
+	}
+
+	/**
+	 * Set Date value of the hour attribute
+	 * @param hour
+	 */
+	public void setHour(Date hour) {
+		this.hour = hour;
+	}
+
+	/**
+	 *  Get Date value of the date attribute
+	 * @return date
+	 */
+	public Date getDate() {
+		return this.date;
+	}
+
+	/**
+	 * Set Date value of the date attribute
+	 * @param date
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	/**
+	 *  Get Boolean value of the visibility attribute
+	 * @return visibility
+	 */
+	public boolean getVisibility() {
+		return this.visibility;
+	}
+
+	/**
+	 * Set Boolean value of the visibility attribute
+	 * @param visibility
+	 */
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
+
+	/**
+	 *  Get Movie object of the movie attribute
+	 * @return movie
+	 */
+	public Movie getMovie() {
+		return this.movie;
+	}
+
+	/**
+	 * Set Movie object of the movie attribute
+	 * @param movie
+	 */
+	public void setMovie(Movie movie) {
+		this.movie = movie;
+	}
+
+	/**
+	 *  Get Room object of the room attribute
+	 * @return room
+	 */
+	public Room getRoom() {
+		return this.room;
+	}
+
+	/**
+	 * Set Room object of the room attribute
+	 * @param room
+	 */
+	public void setRoom(Room room) {
+		this.room = room;
+	}		
 }
