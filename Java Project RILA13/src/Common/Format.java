@@ -173,7 +173,7 @@ public class Format implements ADM{
 	 * Get Integer value of the id attribute
 	 * @return id
 	 */
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
