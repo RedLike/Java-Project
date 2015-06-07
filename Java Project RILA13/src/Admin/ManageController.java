@@ -56,6 +56,8 @@ public class ManageController {
 	private static ArrayList<Booking> bookingListFilter = new ArrayList<Booking>();
 	private static ArrayList<Terminal> terminalList = new ArrayList<Terminal>();
 	private static ArrayList<Terminal> terminalListFilter = new ArrayList<Terminal>();
+	private static ArrayList<UserAdmin> userList = new ArrayList<UserAdmin>();
+	private static ArrayList<UserAdmin> userListFilter = new ArrayList<UserAdmin>();
 	
 	@FXML
 	private Button btnCinema;
@@ -154,6 +156,26 @@ public class ManageController {
 	
 	@FXML
 	private Group grpUsers;
+	@FXML
+	private TabPane tabPaneUsers;
+	@FXML
+	private Tab tabUsers;
+	@FXML
+	private ListView<String> listviewUsers;
+	@FXML
+	private TextField inUsersName;
+	@FXML
+	private TextField inUsersLogin;
+	@FXML
+	private TextField inUsersPassword;
+	@FXML
+	private TextField inUsersId;
+	@FXML
+	private Button btnUsersAdd;
+	@FXML
+	private Button btnUsersModify;
+	@FXML
+	private Button btnUsersDelete;
 	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -200,8 +222,9 @@ public class ManageController {
 	private void displayTabCinemaAll(ActionEvent e) {
 		grpMovies.setVisible(false);
 		tabPaneMovie.setVisible(false);
-		
 		grpUsers.setVisible(false);
+		tabPaneUsers.setVisible(false);
+		
 		
 		refreshListViewCinema();
 		grpCinema.setVisible(true);
@@ -239,8 +262,8 @@ public class ManageController {
 	private void displayTabMoviesAll(ActionEvent e) {
 		grpCinema.setVisible(false);
 		tabPaneCinema.setVisible(false);
-		
 		grpUsers.setVisible(false);
+		tabPaneUsers.setVisible(false);
 		
 		refreshListViewMovie();
 		grpMovies.setVisible(true);
@@ -252,18 +275,151 @@ public class ManageController {
 	 */
 	@FXML
 	private void refreshListViewMovie() {
+		
 		listviewMovie.getItems().clear();
+	
 
 				
 		for (Movie movie : ManageController.movieList) {
 			listviewMovie.getItems().add(movie.getName());
-			
-			
+					
 		}
+
+	}
+	
+	
+	
+	/**
+	 * Méthode permettant d'afficher le menu de droite associé à la catégorie Users.
+	 * @param e
+	 */
+	@FXML
+	private void displayTabUsersAll(ActionEvent e) {
+		grpCinema.setVisible(false);
+		tabPaneCinema.setVisible(false);
+		grpMovies.setVisible(false);
+		tabPaneMovie.setVisible(false);
 		
+		
+		refreshListViewUsers();
+		
+		grpUsers.setVisible(true);
+		tabPaneUsers.setVisible(true);
 		
 	}
 	
+	
+	/**
+	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Movie.
+	 */
+	@FXML
+	private void refreshListViewUsers() {
+
+		listviewUsers.getItems().clear();
+
+		
+		for (UserAdmin user : ManageController.userList) {
+			listviewUsers.getItems().add(user.getName());
+					
+		}
+
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	//FUNCTION FOR USERS(Users TAB) PANEL (Display, Update DB)		
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Users=>Users.
+	 */
+	@FXML
+	private void selectUser() {	
+		int itemUser = listviewUsers.getSelectionModel().getSelectedIndex();
+		if (itemUser >= 0) {
+			UserAdmin user = ManageController.userList.get(itemUser);
+			
+			inUsersId.setText(user.getId().toString());
+			inUsersName.setText(user.getName());
+			inUsersLogin.setText(user.getLogin());
+			
+			btnUsersModify.setDisable(false);
+			btnUsersDelete.setDisable(false);
+		}
+	}
+	
+	
+	/**
+	 * Méthode permettant d'ajouter un user.
+	 */
+	@FXML
+	private void addUsers() {
+		
+//		System.out.println("test");
+		String name = inUsersName.getText();
+		String login = inUsersLogin.getText();
+		String password = inUsersPassword.getText();
+		
+		UserAdmin user = new UserAdmin(name, login, password);
+		user.create();
+				
+		funcListUsers();
+		refreshListViewUsers();
+	}
+	
+	/**
+	 * Méthode permettant de modifier un user.
+	 */
+	@FXML
+	private void modifyUsers() {
+		
+		String name = inUsersName.getText();
+		String login = inUsersLogin.getText();
+		String password = inUsersPassword.getText();
+		String id = inUsersId.getText();
+		
+		
+		for (UserAdmin user : ManageController.userList) {;
+			if (id.equals(""+user.getId())) {
+				user.setName(name);
+				user.setLogin(login);
+				user.setPassword(password);
+				user.update();
+			}
+		}
+				
+		refreshListViewUsers();
+	}
+	
+	/**
+	 * Méthode permettant de supprimer un user.
+	 */
+	@FXML
+	private void deleteUsers() {
+		String id = inUsersId.getText();
+		
+		for (UserAdmin user : ManageController.userList) {;
+			if (id.equals(""+user.getId())) {
+				if (user.delete()) {
+					System.out.println("delete OK");
+					btnUsersModify.setDisable(true);
+					btnUsersDelete.setDisable(true);
+				} else {
+					System.out.println("delete NOK");
+				}
+			}
+		}			
+		
+//		funcListCinema();
+		
+		initApp();
+		
+		refreshListViewUsers();
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -708,7 +864,30 @@ public class ManageController {
 		funcListMovie();
 		funcListFilmshow();
 		funcListBooking();
+		funcListUsers();
 	}	
+	
+	/**
+	 * Initialize user objects lists needed by the application
+	 */
+	private void funcListUsers() {
+		ConnectDB db = new ConnectDB();
+		try {
+			ManageController.userList.clear();
+			//Cinema
+			String sqlRead0 = "SELECT Id, Name, Login, Password FROM UserAdmin;";
+			ResultSet res = db.ReadDB(sqlRead0);
+			while(res.next())
+			{		
+				UserAdmin user = new UserAdmin(res.getInt("Id"), res.getString("Name"), res.getString("Login"), res.getString("Password"));
+				ManageController.userList.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.CloseDB();
+		}
+	}
 	
 	/**
 	 * Initialize cinema objects lists needed by the application

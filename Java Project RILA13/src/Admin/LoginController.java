@@ -78,9 +78,7 @@ public class LoginController {
 			
 			UserAdmin admin = new UserAdmin(loginInput.getText(), passwordInput.getText());
 			if (admin.login()) {
-				System.out.println("User Connected");
-				System.out.println("Name : "+admin.getName());
-				System.out.println("Login : "+admin.getLogin());
+				System.out.println("User "+admin.getLogin()+" Connected");
 				
 				Button button = (Button) e.getSource();
 				Stage stage = (Stage) button.getScene().getWindow();
