@@ -17,6 +17,8 @@ import Common.Movie;
 import Common.Room;
 import EndUser.Booking;
 import EndUser.Terminal;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -152,6 +154,30 @@ public class ManageController {
 	private ImageView inMovieImage;
 	@FXML
 	private Button btnTheMovieDBUpdate;
+	
+	@FXML
+	private Tab tabFormat;
+	@FXML
+	private ListView<String> listviewFormat;
+	@FXML
+	private TextField inFormatId;
+	@FXML
+	private TextField inFormatLabel;
+	@FXML
+	private TextField inFormatLanguage;
+	@FXML
+	private TextArea inFormatDescription;
+	@FXML
+	private ListView<String> listviewFormatMovie;
+	@FXML
+	private ImageView imageFormatMovie;
+	@FXML
+	private Button btnFormatAdd;
+	@FXML
+	private Button btnFormatModify;
+	@FXML
+	private Button btnFormatDelete;
+
 
 	
 	@FXML
@@ -278,12 +304,13 @@ public class ManageController {
 		
 		listviewMovie.getItems().clear();
 	
-
-				
+		
 		for (Movie movie : ManageController.movieList) {
 			listviewMovie.getItems().add(movie.getName());
 					
 		}
+		
+		refreshListViewFormat();
 
 	}
 	
@@ -310,7 +337,7 @@ public class ManageController {
 	
 	
 	/**
-	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Movie.
+	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Users.
 	 */
 	@FXML
 	private void refreshListViewUsers() {
@@ -320,6 +347,24 @@ public class ManageController {
 		
 		for (UserAdmin user : ManageController.userList) {
 			listviewUsers.getItems().add(user.getName());
+					
+		}
+
+	}
+	
+	/**
+	 * Méthode permettant de refresh toutes les ListView/combox/etc... de la catégorie Users.
+	 */
+	@FXML
+	private void refreshListViewFormat() {
+
+		listviewFormat.getItems().clear();
+		listviewFormatMovie.getItems().clear();
+		imageFormatMovie.setVisible(false);
+
+		
+		for (Format format : ManageController.formatList) {
+			listviewFormat.getItems().add(format.getLanguage());
 					
 		}
 
@@ -421,6 +466,131 @@ public class ManageController {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////	
 	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	//FUNCTION FOR MOVIES(Format TAB) PANEL (Display, Update DB)
+	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Movie=>Format.
+	 */
+	@FXML
+	private void selectFormat() {	
+		int itemFormat = listviewFormat.getSelectionModel().getSelectedIndex();
+		if (itemFormat >= 0) {
+			Format format = ManageController.formatList.get(itemFormat);
+			
+			inFormatId.setText(format.getId().toString());
+			inFormatLabel.setText(format.getLabel());
+			inFormatLanguage.setText(format.getLanguage());
+			inFormatDescription.setText(format.getDescription());
+			
+			btnFormatModify.setDisable(false);
+			btnFormatDelete.setDisable(false);
+			
+			
+			listviewFormatMovie.getItems().clear();
+
+			for (Movie movie : ManageController.movieList) {
+				if (movie.getFormat().equals(format)) {
+					listviewFormatMovie.getItems().add(movie.getName());
+					ManageController.movieListFilter.add(movie);
+				}			
+			}
+			
+		}
+	}
+	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Movie=>Format.
+	 */
+	@FXML
+	private void selectFormatMovie() {	
+		int itemMovie = listviewFormatMovie.getSelectionModel().getSelectedIndex();
+		if (itemMovie >= 0) {
+			Movie movie = ManageController.movieListFilter.get(itemMovie);
+			
+			Image imageMovie = new Image(movie.getImage());
+			imageFormatMovie.setImage(imageMovie);
+			
+			imageFormatMovie.setVisible(true);
+			
+		}
+	}
+	
+	
+	/**
+	 * Méthode permettant d'ajouter un format.
+	 */
+	@FXML
+	private void addFormat() {
+		
+//		System.out.println("test");
+		String label = inFormatLabel.getText();
+		String language = inFormatLanguage.getText();
+		String description = inFormatDescription.getText();
+		
+		Format format = new Format(label, language, description);
+		format.create();
+				
+		funcListFormat();
+		refreshListViewFormat();
+	}
+	
+	/**
+	 * Méthode permettant de modifier un format.
+	 */
+	@FXML
+	private void modifyFormat() {
+		
+		String label = inFormatLabel.getText();
+		String language = inFormatLanguage.getText();
+		String description = inFormatDescription.getText();
+		String id = inFormatId.getText();
+		
+		
+		for (Format format : ManageController.formatList) {;
+			if (id.equals(""+format.getId())) {
+				format.setLabel(label);
+				format.setLanguage(language);
+				format.setDescription(description);
+				format.update();
+			}
+		}
+				
+		refreshListViewFormat();
+	}
+	
+	/**
+	 * Méthode permettant de supprimer un format.
+	 */
+	@FXML
+	private void deleteFormat() {
+		String id = inUsersId.getText();
+		
+		for (Format format : ManageController.formatList) {;
+			if (id.equals(""+format.getId())) {
+				if (format.delete()) {
+					System.out.println("delete OK");
+					btnFormatModify.setDisable(true);
+					btnFormatDelete.setDisable(true);
+				} else {
+					System.out.println("delete NOK");
+				}
+			}
+		}			
+		
+		
+		funcListFormat();
+		
+		refreshListViewFormat();
+	}
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,25 +629,38 @@ public class ManageController {
 	 * Méthode permettant de lancer la fonction permettant de récupéré des film depuis Th Movie DB.
 	 */
 	@FXML
-	private void StartTheMovieDB() {	
-		TheMovieDB info;
-		List<Movie> movies;
-		try {
-			info = new TheMovieDB();
-			if (!ManageController.formatList.isEmpty()) {
-				movies = info.Discover(ManageController.formatList);
-				if (!movies.isEmpty()) {
-					info.Insert(movies);
+	private void StartTheMovieDB() {
+//		final Runnable check = new Runnable() {
+
+//			@Override
+//			public void run() {
+				// TODO Auto-generated method stub
+				TheMovieDB info;
+				List<Movie> movies;
+				try {
+					info = new TheMovieDB();
+					if (!ManageController.formatList.isEmpty()) {
+						movies = info.Discover(ManageController.formatList);
+						if (!movies.isEmpty()) {
+							info.Insert(movies);
+						}
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}
+				
+				initApp();
+				refreshListViewMovie();
+				
+//			}
 			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		};
 		
-		initApp();
-		refreshListViewMovie();
+//		new Thread(check).start();
+		
+		
 		
 	}
 	
