@@ -78,6 +78,7 @@ public class ConnectDB {
 	@SuppressWarnings("finally")
 	public Integer WriteDB(String sql) {
 		Integer rs = null;
+		System.out.println(sql);
 		try {
 			//exécution de la requète
 			rs = this.st.executeUpdate(sql);
