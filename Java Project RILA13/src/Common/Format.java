@@ -8,7 +8,7 @@ import Interface.ADM;
 
 public class Format implements ADM{
 	
-	private int id;
+	private Integer id;
 	private String label;
 	private String language;
 	private String description;
