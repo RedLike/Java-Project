@@ -4,8 +4,8 @@ package Common;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 
 import API.ConnectDB;
 import EndUser.Booking;

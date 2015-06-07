@@ -130,7 +130,7 @@ public class Format implements ADM{
 		
 		try {
 			String sqlUpdate0 = "UPDATE Format "
-					+ "SET Label='"+this.label+"' AND Language='"+this.language+"' AND Description='"+this.description+"'"
+					+ "SET Label='"+this.label+"', Language='"+this.language+"', Description='"+this.description+"' "
 					+ "WHERE Id='"+this.id+"'";
 			if (db.WriteDB(sqlUpdate0) != null) {
 				res = true;

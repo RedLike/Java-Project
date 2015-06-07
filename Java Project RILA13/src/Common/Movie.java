@@ -192,7 +192,7 @@ public class Movie implements ADM{
 		
 		try {
 			String sqlUpdate0 = "UPDATE Movie "
-					+ "SET Name='"+this.name+"' AND Image='"+this.image+"' AND Duration='"+this.duration+"' AND Description='"+this.description+"' AND Genre='"+this.genre+"' AND Producer='"+this.producer+"' AND ReleaseDate='"+this.releaseDate+"' AND Id_Format='"+this.format.getId()+"'"
+					+ "SET Name='"+this.name+"', Image='"+this.image+"', Duration='"+this.duration+"', Description='"+this.description+"', Genre='"+this.genre+"', Producer='"+this.producer+"', ReleaseDate='"+this.releaseDate+"', Id_Format='"+this.format.getId()+"'"
 					+ "WHERE Id='"+this.id+"'";
 			if (db.WriteDB(sqlUpdate0) != null) {
 				res = true;
