@@ -1,10 +1,14 @@
 package Admin;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import org.json.JSONException;
 
@@ -17,8 +21,8 @@ import Common.Movie;
 import Common.Room;
 import EndUser.Booking;
 import EndUser.Terminal;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +30,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -155,6 +161,36 @@ public class ManageController {
 	@FXML
 	private Button btnTheMovieDBUpdate;
 	
+	//tab FilmShow
+	@FXML
+	private Tab tabFilmshow;
+	@FXML
+	private ComboBox<String> combobox_cinemaselection;
+	@FXML
+	private ComboBox<String> combobox_movieselection;
+	@FXML
+	private ListView<String> listview_filmshow;
+	@FXML
+	private TextField textfiled_idFS;
+	@FXML
+	private TextField textfield_hourFS;
+	@FXML
+	private TextField textfield_dateFS;
+	@FXML
+	private CheckBox checkbox_visibility;
+	@FXML
+	private ChoiceBox<String> choicebox_movieFS;
+	@FXML
+	private ChoiceBox<String> choicebox_roomFS;
+	@FXML
+	private Button button_newFS;
+	@FXML
+	private Button button_addupdateFS;
+	@FXML
+	private Button button_deleteFS;
+	private static ObservableList<FilmShow> filmShowListSorted = FXCollections.observableArrayList();
+	private static ObservableList<Room> roomListSorted = FXCollections.observableArrayList();
+	
 	@FXML
 	private Tab tabFormat;
 	@FXML
@@ -227,10 +263,7 @@ public class ManageController {
 			Parent root = FXMLLoader.load(ManageController.class.getResource("ManageForm.fxml"));
 			this.stage.setScene(new Scene(root));
 			this.stage.show();
-			initApp();
-			
-					
-			
+			initApp();			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -491,6 +524,7 @@ public class ManageController {
 			
 			
 			listviewFormatMovie.getItems().clear();
+			imageFormatMovie.setVisible(false);
 
 			for (Movie movie : ManageController.movieList) {
 				if (movie.getFormat().equals(format)) {
@@ -534,7 +568,7 @@ public class ManageController {
 		Format format = new Format(label, language, description);
 		format.create();
 				
-		funcListFormat();
+		initApp();
 		refreshListViewFormat();
 	}
 	
@@ -567,7 +601,7 @@ public class ManageController {
 	 */
 	@FXML
 	private void deleteFormat() {
-		String id = inUsersId.getText();
+		String id = inFormatId.getText();
 		
 		for (Format format : ManageController.formatList) {;
 			if (id.equals(""+format.getId())) {
@@ -582,14 +616,184 @@ public class ManageController {
 		}			
 		
 		
-		funcListFormat();
+		initApp();
 		
 		refreshListViewFormat();
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////	
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//FUNCTION FOR MOVIES(Filmshow TAB) PANEL (Display, Update DB)	
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////	
+	/**
+	 * Méthode permettant de remplir champs en fonction des choix de la lisstview dans la partie Movie=>Filmshow.
+	 */
+	@FXML
+	private void selectFilmshow() {
+		int itemFilmshow = listview_filmshow.getSelectionModel().getSelectedIndex();
+		int itemMovie = combobox_movieselection.getSelectionModel().getSelectedIndex();
+		
+		if (itemFilmshow >= 0) {
+			FilmShow filmshow = ManageController.filmShowListSorted.get(itemFilmshow);
+			textfiled_idFS.setText(filmshow.getId().intValue()+"");
+			textfield_hourFS.setText(filmshow.getHour().toString().substring(0, 5));
+			textfield_dateFS.setText(filmshow.getDate().toString());
+			checkbox_visibility.setSelected(filmshow.getVisibility());
+			choicebox_movieFS.getSelectionModel().clearSelection();
+			choicebox_movieFS.getSelectionModel().select(itemMovie);
+			choicebox_roomFS.getSelectionModel().clearSelection();
+			choicebox_roomFS.getSelectionModel().select(filmshow.getRoom().getNumber()+"");
+			button_deleteFS.setVisible(true);
+			button_deleteFS.setDisable(false);
+		}
+	}
 	
+	@FXML
+	private void fillBoxFS() {
+		
+		ObservableList<String> cinemaNameList = FXCollections.observableArrayList();
+		for(Cinema cinema : ManageController.cinemaList)
+		{
+			cinemaNameList.add(cinema.getName());
+		}
+		combobox_cinemaselection.getItems().clear();
+		combobox_cinemaselection.setItems(cinemaNameList);
+		
+		ObservableList<String> movieNameList = FXCollections.observableArrayList();
+		for(Movie movie : ManageController.movieList)
+		{
+			movieNameList.add(movie.getName());
+		}
+		combobox_movieselection.getItems().clear();
+		combobox_movieselection.setItems(movieNameList);
+		choicebox_movieFS.getItems().clear();
+		choicebox_movieFS.setItems(movieNameList);
+	}
+	
+	@FXML
+	private void fillListViewFS() {	
+		if(combobox_cinemaselection.getSelectionModel().getSelectedIndex()>=0 && combobox_movieselection.getSelectionModel().getSelectedIndex()>=0)
+		{
+			ObservableList<String> filmShowList = FXCollections.observableArrayList();
+			
+			String hour, dateToSub, date, day, month, year;
+			Movie selectedMovie = ManageController.movieList.get(combobox_movieselection.getSelectionModel().getSelectedIndex());
+			Cinema selectedCinema = ManageController.cinemaList.get(combobox_cinemaselection.getSelectionModel().getSelectedIndex());
+			ManageController.filmShowListSorted.clear();
+			
+	    	for(FilmShow filmShow : ManageController.filmShowList)
+			{	    		
+	    		if(
+	    		filmShow.getMovie().getId()==selectedMovie.getId() 
+	    		&& filmShow.getRoom().getCinema().getId()==selectedCinema.getId()
+	    		)
+	    		{
+	    			hour = filmShow.getHour().toString().substring(0, 5);
+	        		dateToSub = filmShow.getDate().toString();
+	            		day = dateToSub.substring(8, 10);
+	            		month = dateToSub.substring(5, 7);
+	            		year = dateToSub.substring(0, 4);
+	        		date = year +"-"+ month +"-"+ day;
+	        		filmShowList.add("at "+hour+" the "+date);
+	        		ManageController.filmShowListSorted.add(filmShow);
+	    		}    		
+			}
+	    	listview_filmshow.setItems(filmShowList);
+	    	clearFilmShow();
+	    	
+			ObservableList<String> roomNumberList = FXCollections.observableArrayList();
+			for(Room room : ManageController.roomList)
+			{
+				if(room.getCinema().getId()==selectedCinema.getId())
+				{
+					roomNumberList.add(room.getNumber()+"");
+					roomListSorted.add(room);
+				}
+			}
+			choicebox_roomFS.getItems().clear();
+			choicebox_roomFS.setItems(roomNumberList);
+		}	
+	}
+	
+	@FXML
+	private void clearFilmShow() {
+		textfiled_idFS.setText("");
+		textfield_hourFS.setText("");
+		textfield_dateFS.setText("");
+		checkbox_visibility.setSelected(true);
+		choicebox_movieFS.getSelectionModel().clearSelection();
+		choicebox_roomFS.getSelectionModel().clearSelection();
+		button_deleteFS.setVisible(false);
+		button_deleteFS.setDisable(true);
+	}
+	
+	@FXML
+	private void addupdateFilmShow() {
+		if(textfiled_idFS.getText().equals("")) //add
+		{
+			FilmShow filmShow = new FilmShow(
+					Time.valueOf(textfield_hourFS.getText()+":00"),
+					Date.valueOf(textfield_dateFS.getText()),
+					checkbox_visibility.isSelected(),
+					ManageController.movieList.get(choicebox_movieFS.getSelectionModel().getSelectedIndex()),
+					roomListSorted.get(choicebox_roomFS.getSelectionModel().getSelectedIndex()));
+			filmShow.create();
+			JOptionPane.showMessageDialog(null, "FilmShow added");
+		}
+		else //update
+		{
+			String Id = textfiled_idFS.getText();
+			for(FilmShow filmshow : ManageController.filmShowList)
+			{
+				if (Id.equals(""+filmshow.getId())) {
+					filmshow.setHour(Time.valueOf(textfield_hourFS.getText()+":00"));
+					filmshow.setDate(Date.valueOf(textfield_dateFS.getText()));
+					filmshow.setVisibility(checkbox_visibility.isSelected());
+					filmshow.setMovie(ManageController.movieList.get(choicebox_movieFS.getSelectionModel().getSelectedIndex()));
+					filmshow.setRoom(roomListSorted.get(choicebox_roomFS.getSelectionModel().getSelectedIndex()));
+					filmshow.update();
+					JOptionPane.showMessageDialog(null, "FilmShow updated");
+				}
+			}			
+		}
+		funcListFilmshow();
+		
+		int itemFilmshow = listview_filmshow.getSelectionModel().getSelectedIndex();
+		fillListViewFS();
+		listview_filmshow.getSelectionModel().select(itemFilmshow);
+	}
+	
+	@FXML
+	private void deleteFilmShow() {
+		if(!textfiled_idFS.getText().equals(""))
+		{
+			int n = JOptionPane.showConfirmDialog(  
+	                null,
+	                "Do you want to delete the FilmShow?" ,
+	                "",
+	                JOptionPane.YES_NO_OPTION);
+
+	      if(n == JOptionPane.YES_OPTION)
+	      {
+	    	  String Id = textfiled_idFS.getText();
+				for(FilmShow filmshow : ManageController.filmShowList)
+				{
+					if (Id.equals(""+filmshow.getId())) {
+						filmshow.delete();
+					}
+				}
+	          JOptionPane.showMessageDialog(null, "FilmShow deleted");
+	          funcListFilmshow();
+	          fillListViewFS();
+	      }	
+		}
+	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
