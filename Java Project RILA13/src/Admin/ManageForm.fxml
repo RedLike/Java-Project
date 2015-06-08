@@ -93,7 +93,7 @@
                         </TabPane>
                      </children>
                   </Group>
-                  <Group fx:id="grpMovies" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Group fx:id="grpMovies" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <TabPane fx:id="tabPaneMovie" prefHeight="570.0" prefWidth="612.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="135.0" visible="false">
                           <tabs>
@@ -122,9 +122,29 @@
                                     </AnchorPane>
                               </content>
                             </Tab>
-                            <Tab fx:id="tabFilmshow" text="Filmshow">
+                            <Tab fx:id="tabFilmshow" onSelectionChanged="#fillBoxFS" text="Filmshow">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ComboBox fx:id="combobox_movieselection" layoutX="47.0" layoutY="86.0" onAction="#fillListViewFS" prefHeight="25.0" prefWidth="201.0" />
+                                          <ListView fx:id="listview_filmshow" layoutX="47.0" layoutY="122.0" onMouseClicked="#selectFilmshow" prefHeight="350.0" prefWidth="200.0" />
+                                          <Button fx:id="button_newFS" layoutX="311.0" layoutY="389.0" mnemonicParsing="false" onAction="#clearFilmShow" prefHeight="25.0" prefWidth="59.0" text="New" />
+                                          <ChoiceBox fx:id="choicebox_movieFS" layoutX="376.0" layoutY="266.0" prefWidth="150.0" />
+                                          <CheckBox fx:id="checkbox_visibility" layoutX="376.0" layoutY="232.0" mnemonicParsing="false" text="Visible" />
+                                          <ChoiceBox fx:id="choicebox_roomFS" layoutX="374.0" layoutY="315.0" prefWidth="150.0" />
+                                          <TextField fx:id="textfield_hourFS" layoutX="367.0" layoutY="141.0" />
+                                          <TextField fx:id="textfield_dateFS" layoutX="367.0" layoutY="179.0" />
+                                          <Label layoutX="324.0" layoutY="145.0" text="Hour" />
+                                          <Label layoutX="324.0" layoutY="183.0" text="Date" />
+                                          <Label layoutX="324.0" layoutY="270.0" text="Movie" />
+                                          <Label layoutX="324.0" layoutY="319.0" text="Room" />
+                                          <TextField fx:id="textfiled_idFS" editable="false" layoutX="367.0" layoutY="98.0" prefHeight="25.0" prefWidth="75.0" visible="false" />
+                                          <Button fx:id="button_addupdateFS" layoutX="391.0" layoutY="389.0" mnemonicParsing="false" onAction="#addupdateFilmShow" text="Add/Update" />
+                                          <Button fx:id="button_deleteFS" layoutX="494.0" layoutY="389.0" mnemonicParsing="false" onAction="#deleteFilmShow" prefHeight="25.0" prefWidth="61.0" text="Delete" />
+                                          <ComboBox fx:id="combobox_cinemaselection" layoutX="47.0" layoutY="31.0" onAction="#fillListViewFS" prefHeight="25.0" prefWidth="201.0" />
+                                          <Label layoutX="47.0" layoutY="14.0" text="Cinema" />
+                                          <Label layoutX="47.0" layoutY="67.0" text="Movie" />  
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
                               <Tab fx:id="tabFormat" text="Format">

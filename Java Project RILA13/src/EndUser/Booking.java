@@ -3,7 +3,7 @@ package EndUser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 import API.ConnectDB;
 import Common.FilmShow;
@@ -61,13 +61,7 @@ public class Booking implements ADM{
 		ConnectDB db = new ConnectDB();
 		
 		try {
-			String sqlRead0 = "SELECT Id, Hour, Date, Id_FilmShow FROM Booking "
-							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"'";
-			ResultSet result0 = db.ReadDB(sqlRead0);
-			
-			if (!result0.next()) {
-				String sqlInsert0 = "INSERT INTO Booking(Hour, Date, Id_FilmShow) "
-						+ "VALUES('"+this.hour+"', '"+this.date+"', '"+this.filmshow.getId()+"')";
+				String sqlInsert0 = "INSERT INTO Booking(Hour, Date, Id_FilmShow) VALUES('"+this.hour+"', '"+this.date+"', '"+this.filmshow.getId()+"')";
 				System.out.println(sqlInsert0);
 				db.WriteDB(sqlInsert0);
 				
@@ -77,11 +71,6 @@ public class Booking implements ADM{
 				result1.next();
 				setId(result1.getInt(1));
 				res = true;				
-			} else {
-				setId(result0.getInt("Id"));
-				System.out.println("Booking already exist");
-				res = false;
-			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

@@ -130,14 +130,20 @@ public class FilmShow implements ADM {
 		ConnectDB db = new ConnectDB();
 		
 		try {
+			int visible = 0;
+			if(this.visibility)
+			{
+				visible = 1;
+			}
+			
 			String sqlRead0 = "SELECT Id, Hour, Date, Visibility, Id_Movie, Id_Room FROM FilmShow "
-							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"' AND Visibility='"+this.visibility+"'"
+							+ "WHERE Hour='"+this.hour+"' AND Date='"+this.date+"' AND Visibility='"+visible+"'"
 							+ " AND Id_Movie='"+this.movie.getId()+"' AND Id_Room='"+this.room.getId()+"' ";
 			ResultSet result0 = db.ReadDB(sqlRead0);
 			
 			if (!result0.next()) {
 				String sqlInsert0 = "INSERT INTO FilmShow(Hour, Date, Visibility, Id_Movie, Id_Room) "
-						+ "VALUES('"+this.hour+"', '"+this.date+"', '"+this.visibility+"', '"+this.movie.getId()+"'"
+						+ "VALUES('"+this.hour+"', '"+this.date+"', '"+visible+"', '"+this.movie.getId()+"'"
 						+ ", '"+this.room.getId()+"')";
 				System.out.println(sqlInsert0);
 				db.WriteDB(sqlInsert0);
@@ -173,8 +179,14 @@ public class FilmShow implements ADM {
 		ConnectDB db = new ConnectDB();
 		
 		try {
+			int visible = 0;
+			if(this.visibility)
+			{
+				visible = 1;
+			}
+			
 			String sqlUpdate0 = "UPDATE FilmShow "
-					+ "SET Hour='"+this.hour+"', Date='"+this.date+"', Visibility='"+this.visibility+"'"
+					+ "SET Hour='"+this.hour+"', Date='"+this.date+"', Visibility='"+visible+"'"
 					+ ", Id_Movie='"+this.movie.getId()+"', Id_Room='"+this.room.getId()+"' "
 					+ "WHERE Id='"+this.id+"'";
 			if (db.WriteDB(sqlUpdate0) != null) {
