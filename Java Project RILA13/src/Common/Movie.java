@@ -138,16 +138,19 @@ public class Movie implements ADM{
 				
 				result1.next();
 				setId(result1.getInt(1));
-				res = true;				
+				res = true;		
 			} else {
 				setId(result0.getInt("Id"));
 				System.out.println("Movie already exist");
 				res = false;
+
 			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+
 			db.CloseDB();
+
 		}		
 		return res;
 	}

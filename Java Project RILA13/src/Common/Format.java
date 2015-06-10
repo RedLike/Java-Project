@@ -26,10 +26,20 @@ public class Format implements ADM{
 	 * @param language
 	 * @param description
 	 */
-	public Format(String label, String language, String description) {
+	public Format(String label, String language) {
 		this();
 		this.label = label;
 		this.language = language;
+	}
+	
+	/**
+	 * Format constructor with parameters
+	 * @param label
+	 * @param language
+	 * @param description
+	 */
+	public Format(String label, String language, String description) {
+		this(label, language);
 		this.description = description;
 	}
 	

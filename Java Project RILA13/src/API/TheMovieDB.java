@@ -79,7 +79,7 @@ public class TheMovieDB {
 	 * @return List<movie> Retourne une list de tous les films récent
 	 * @throws JSONException 
 	 */
-	public List<Movie> Discover(ArrayList<Format> listFormat) throws JSONException {
+	public List<Movie> Discover() throws JSONException {
 		List<Movie> moviesDiscover = null;
 		if(downloadJson("discover/movie?")) {
 			moviesDiscover = new ArrayList<>();
@@ -117,7 +117,7 @@ public class TheMovieDB {
 				}	
 					
 				Movie movie = new Movie(original_title, idMovieDB, poster_path, overview, release_date);
-				getInfos(movie, listFormat);
+				getInfos(movie);
 				
 				moviesDiscover.add(movie);
 			}
@@ -133,7 +133,7 @@ public class TheMovieDB {
 	 * @param listFormat afin de vérifier si le film est disponible dans le format demandé (langue)
 	 * @return Movie Retourne l'objet Movie complété
 	 */
-	public Movie getInfos(Movie movieFromSearch, ArrayList<Format> listFormat) {
+	public Movie getInfos(Movie movieFromSearch) {
 		Movie movie = null;
 
 		try {
@@ -168,12 +168,19 @@ public class TheMovieDB {
 					
 					format = jsonObject.getJSONArray("spoken_languages").get(0).toString();
 					format = format.substring(9,format.indexOf("\",\"",9));
+					System.out.println("FORMAT : "+format);
 					
-					for(Format x : listFormat) {
-						if (x.getLanguage().equals(format.toString()) ) {
-							movieFromSearch.setFormat(x);
-						}
-					}
+//					for(Format x : listFormat) {
+//						if (x.getLanguage().equals(format.toString()) ) {
+//							movieFromSearch.setFormat(x);
+//						} else {
+//							String LabelFormat = "VOST"+format.substring(0, 2).toUpperCase();
+							String LabelFormat = "VOSTFR";
+							Format nFormat = new Format(LabelFormat, format);
+							nFormat.create();
+							movieFromSearch.setFormat(nFormat);
+//						}
+//					}
 				}
 //				System.out.println(movieFromSearch.getName());
 			}

@@ -67,12 +67,6 @@ public class LoginController {
 	@FXML
 	private void connexion(ActionEvent e) {
 		
-//		Button button = (Button) e.getSource();
-//		Stage stage = (Stage) button.getScene().getWindow();
-//		stage.close();
-		
-//		@SuppressWarnings("unused")
-//		ManageController manageForm = new ManageController(stage);
 		
 		if(!loginInput.getText().isEmpty() && !passwordInput.getText().isEmpty()) {
 			

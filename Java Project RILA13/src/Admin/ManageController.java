@@ -819,6 +819,7 @@ public class ManageController {
 			inMovieProducer.setText(movie.getProducer());
 			inMovieReleasedate.setText(movie.getReleaseDate());
 			inMovieDescription.setText(movie.getDescription());
+			inMovieDescription.setWrapText(true);
 			
 			Image imageMovie = new Image(movie.getImage());
 			inMovieImage.setImage(imageMovie);
@@ -834,36 +835,28 @@ public class ManageController {
 	 */
 	@FXML
 	private void StartTheMovieDB() {
-//		final Runnable check = new Runnable() {
-
-//			@Override
-//			public void run() {
-				// TODO Auto-generated method stub
-				TheMovieDB info;
-				List<Movie> movies;
-				try {
-					info = new TheMovieDB();
-					if (!ManageController.formatList.isEmpty()) {
-						movies = info.Discover(ManageController.formatList);
-						if (!movies.isEmpty()) {
-							info.Insert(movies);
-						}
-					}
-					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		// TODO Auto-generated method stub
+		TheMovieDB info;
+		List<Movie> movies;
+		try {
+			info = new TheMovieDB();
+//			if (!ManageController.formatList.isEmpty()) {
+				movies = info.Discover();
+				if (!movies.isEmpty()) {
+					info.Insert(movies);
 				}
-				
-				initApp();
-				refreshListViewMovie();
-				
 //			}
 			
-//		};
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-//		new Thread(check).start();
-		
+//		System.out.println("initapp");
+		initApp();
+//		System.out.println("refresh listview");
+		refreshListViewMovie();
+					
 		
 		
 	}
